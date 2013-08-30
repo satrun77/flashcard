@@ -1,0 +1,26 @@
+parameters:
+    moo_flashcard.controller.flashcard.class: Moo\FlashCardBundle\Controller\DefaultController
+
+services:
+    moo_flashcard.flashcard.controller:
+      class:      %moo_flashcard.controller.flashcard.class%
+    moo_flashcard.card.repository:
+      class:     Moo\FlashCardBundle\Repository\Card
+      arguments: [MooFlashCardBundle:Card]
+      factory_service: doctrine.orm.default_entity_manager
+      factory_method: getRepository
+      tags:
+         -  { name: knp_paginator.injectable, paginator: knp_paginator}
+    moo_flashcard.cardview.repository:
+      class:     Moo\FlashCardBundle\Repository\CardView
+      arguments: [MooFlashCardBundle:CardView]
+      factory_service: doctrine.orm.default_entity_manager
+      factory_method: getRepository
+    moo_flashcard.category.repository:
+      class:     Moo\FlashCardBundle\Repository\Category
+      arguments: [MooFlashCardBundle:Category]
+      factory_service: doctrine.orm.default_entity_manager
+      factory_method: getRepository
+    moo_flashcard.exception.controller:
+        parent: twig.controller.exception
+        class:  Moo\FlashCardBundle\Controller\ExceptionController

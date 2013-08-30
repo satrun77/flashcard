@@ -1,0 +1,39 @@
+{% extends 'MooFlashCardBundle::base.html.twig' %}
+
+{% block metas %}
+    {{ parent() }}
+    <meta name="keywords" content="{% trans %}meta_index_keywords{% endtrans %}"/>
+    <meta name="description" content="{% trans %}meta_index_description{% endtrans %}"/>
+{% endblock metas %}
+
+{% block init_javascript %}
+<script type="text/javascript">
+    jQuery(function($) {
+        moofc.init(moofc.homepage, {
+            loadMoreMax: '{{ limit }}',
+            loadMoreContent: '{% trans %}Load more...{% endtrans %}',
+            loadMoreCompeteMessage: '{% trans %}All cards are loaded!{% endtrans %}',
+            loadMoreButton: $('#fc-loadmore')
+        });
+    });
+    </script>
+{% endblock %}
+
+{% block page_body_tag %}
+    <body class="fc-homepage">
+{% endblock %}
+
+{% block body %}
+    <form class="navbar-form pull-right" role="form" action="{{ app.request.getUri() }}api/cards.html" method="get">
+    <div class="form-group">
+        <input type="text" class="form-control" placeholder="Search" name="query" id="fc-search">
+    </div>
+    <button type="submit" id="fc-search-btn" class="btn btn-info">Search</button>
+    </form>
+    <div id="fc-cards">
+    {{ include('MooFlashCardBundle:Card:list.html.twig', { 'cards': cards }) }}
+    </div>
+    {% if cards.getTotalItemCount() > cards.count() %}
+        <button type="button" class="btn btn-default btn-lg btn-block" id="fc-loadmore">{% trans %}Load more...{% endtrans %}</button>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,30 @@
+# flash card api doc
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix:   /api/doc
+
+# flash card api
+moo_flashcard_api:
+    type:     rest
+    resource: Moo\FlashCardBundle\Controller\RestApiController
+    prefix:   /api
+    defaults: { _format: json }
+    requirements:
+        _format:  html|json
+
+# flash card view page
+moo_flashcard_card:
+    pattern:  /{slug}
+    defaults: { _controller: MooFlashCardBundle:Default:view, popup: '' }
+    requirements:
+        _method:  GET
+        _format:  html
+        slug: "[a-zA-Z0-9-_]+"
+
+# show random selection of flash cards
+moo_flashcard_index:
+    pattern:  /
+    defaults: { _controller: MooFlashCardBundle:Default:index}
+    requirements:
+        _method:  GET
+        _format:  html

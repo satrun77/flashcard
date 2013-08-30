@@ -1,0 +1,22 @@
+{% extends 'MooFlashCardBundle::base.html.twig' %}
+
+{% block metas %}
+{% endblock metas %}
+
+{% block title %}
+{{ status_code }} {{ status_text }} - {{ parent() }}
+{% endblock title %}
+
+{% block body %}
+{% if status_code == 404 %}
+    <h3>{% trans %}Oops! What you are looking for cannot be found.{% endtrans %}</h3>
+    <div class="alert alert-info">
+        {{ exception.message|nl2br|format_file_from_text }}
+    </div>
+{% else %}
+    <h3 class="page-header">{% trans %}Oops! An Error Occurred{% endtrans %}</h3>
+    <div class="alert alert-danger">
+        {% trans with {'%url%': 'http://jamandcheese-on-phptoast.com/contact/'} from "app"  %}Something is broken. Please try again later, or <a href="%url%">contact us</a> regard this error.{% endtrans %}
+    </div>
+{% endif %}
+{% endblock %}

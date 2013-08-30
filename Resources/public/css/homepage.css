@@ -1,0 +1,119 @@
+#fc-modal {
+    background: #E2F3F6;
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 0px;
+    opacity: 0.6;
+    z-index: 0;
+}
+
+#fc-cards {
+    overflow: hidden;
+    margin-bottom: 20px;
+    clear: both;
+}
+
+.fc-cardwrap {
+    height: 175px;
+    overflow: hidden;
+    padding-right: 0px !important;
+    padding-left: 0px !important;
+}
+
+.fc-cardwrap-inner {
+    outline: 1px solid #BDBDBD;
+    padding-right: 0px !important;
+    padding: 8px !important;
+    margin: 4%;
+    overflow: hidden;
+    height: 164px;
+}
+
+.fc-cardcover {
+    position: absolute;
+    width: 96%; /* minus 4% fc-cardwrap-inner margin */
+    height: 175px;
+    background: #E2F3F6;
+    font-size: 14px;
+    color: #111;
+    opacity: 0.5;
+    cursor: pointer;
+    display: none;
+    top:0px;
+    margin: 2%;
+}
+
+.fc-cardwrap .fc-card {
+    width: 500px;
+}
+
+.fc-homepage .container-inner {
+    padding: 0px;
+}
+
+.open.fc-cardwrap, .open .fc-cardwrap-inner  {
+    height:auto;
+}
+
+.fc-cardwrap.open {
+    position: absolute;
+    left: 50%;
+    z-index: 999;
+}
+
+.open.fc-cardwrap .fc-card {
+    width: 100%;
+}
+
+.open .fc-cardwrap-inner {
+    background: #fff;
+}
+
+@media (max-width: 767px) {
+    .col-xxs-1, .fc-cardwrap.open {
+        width: 100% !important;
+        height: auto;
+        margin: 0px !important;
+        position: static !important;
+    }
+    .fc-cardwrap .fc-card {
+        width: auto;
+        margin:10px;
+    }
+    .fc-cardwrap-inner, .fc-cardwrap.open .fc-cardwrap-inner {
+        outline: 0px none;
+        margin: 1% 2%;
+        height: auto;
+    }
+    #fc-modal {
+        display:none !important;
+    }
+}
+
+@media (min-width: 767px) {
+    .fc-cardwrap.open {
+        width: 66.666666666666666%;
+    }
+    .fc-cardwrap.open .fc-cardwrap-inner {
+        margin: 2%;
+    }
+}
+
+@media (min-width: 768px) {
+    .fc-cardwrap.open {
+        width: 75%;
+    }
+    .fc-cardwrap.open .fc-cardwrap-inner {
+        margin: 1.4%;
+    }
+}
+
+@media (min-width: 992px) {
+    .fc-cardwrap.open {
+        width: 66.666666666666666%;
+    }
+    .fc-cardwrap.open .fc-cardwrap-inner {
+        margin: 1%;
+    }
+}

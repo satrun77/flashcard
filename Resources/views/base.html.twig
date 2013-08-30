@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}{{ flashcard_name }}{% endblock %}</title>
+
+        {% block metas %}{% endblock %}
+
+        {% block javascripts %}
+        <script type="text/javascript">
+            var FC_BASEURL = '{{ app.request.getUri() }}';
+        </script>
+        {% spaceless %}
+            <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+            <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+        {% javascripts '@MooFlashCardBundle/Resources/public/js/*'  output='js/fc_script.js' %}
+            <script type="text/javascript" src="{{ asset_url }}"></script>
+        {% endjavascripts %}
+        {% endspaceless %}
+        {% endblock %}
+
+        {% block init_javascript %}
+        {# block for page to initiate js code #}
+        {% endblock %}
+
+        {% block stylesheets %}
+        {% stylesheets  "@MooFlashCardBundle/Resources/public/css/*"  output='css/fc_styles.css' %}
+            <link rel="stylesheet" media="all" type="text/css" href="{{ asset_url }}"/>
+        {% endstylesheets %}
+
+        {% stylesheets
+            output='fonts/glyphicons-halflings-regular.ttf' '@MooFlashCardBundle/Resources/public/fonts/glyphicons-halflings-regular.ttf'
+            output='fonts/glyphicons-halflings-regular.eot' '@MooFlashCardBundle/Resources/public/fonts/glyphicons-halflings-regular.eot'
+            output='fonts/glyphicons-halflings-regular.svg' '@MooFlashCardBundle/Resources/public/fonts/glyphicons-halflings-regular.svg'
+            output='fonts/glyphicons-halflings-regular.woff' '@MooFlashCardBundle/Resources/public/fonts/glyphicons-halflings-regular.woff'
+        %}{% endstylesheets %}
+
+        {% endblock %}
+        </head>
+        {% block page_body_tag %}
+        <body>
+        {% endblock %}
+        <header class="text-center page-header">
+        {% block page_header %}
+            <h2><a href="{{ url('moo_flashcard_index') }}">{{ flashcard_name }}</a></h2>
+        {% endblock %}
+        </header>
+        <section class="container">
+            <div class="container-inner">{% block body %}{% endblock %}</div>
+        </section>
+    </body>
+    <footer></footer>
+</html>

@@ -1,0 +1,55 @@
+Moo\FlashCardBundle\Entity\Category:
+    type: entity
+    repositoryClass: Moo\FlashCardBundle\Repository\Category
+    table: card_category
+    fields:
+        id:
+            id: true
+            type: integer
+            unsigned: false
+            nullable: false
+            generator:
+                strategy: IDENTITY
+        title:
+            type: string
+            length: 255
+            fixed: false
+            nullable: false
+        description:
+            type: text
+            nullable: true
+        created:
+            type: datetime
+            nullable: false
+        updated:
+            type: datetime
+            nullable: false
+        isActive:
+            type: boolean
+            nullable: true
+            column: is_active
+            default: false
+    oneToMany:
+        cards:
+            targetEntity: Card
+            mappedBy: category
+        children:
+            targetEntity: Category
+            mappedBy: parent
+    manyToOne:
+        parent:
+            targetEntity: Category
+            cascade: {  }
+            mappedBy: null
+            inversedBy: children
+            joinColumns:
+                parent:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }
+    options:
+      collate: utf8_unicode_ci
+      charset: utf8
+    indexes:
+      parent:
+        columns: [parent]

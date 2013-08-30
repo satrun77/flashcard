@@ -1,0 +1,19 @@
+.page-header {
+    padding: 40px 0 1px;
+    background: rgb(248, 248, 248);
+    margin:0px 0px 20px 0px;
+}
+
+.container {
+    padding: 0px;
+}
+
+.container-inner {
+    padding: 0px 15px;
+    text-align: left;
+    overflow: hidden;
+}
+
+footer {
+    padding: 20px 0px;
+}
