@@ -56,7 +56,7 @@ class LoadCardData extends AbstractFixture implements OrderedFixtureInterface
         $card->setTitle($title);
         $card->setCategory($category);
         $card->setContent($content);
-        $card->setIsActive($isActive);
+        $card->setActive($isActive);
         $card->setMetaKeywords($keywords);
         $card->setMetaDescription($description);
         if ($slug !== null) {

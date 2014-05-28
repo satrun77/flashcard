@@ -82,7 +82,6 @@ class DefaultController extends Controller
 
     /**
      * Update flashcard view counter
-     * @TODO move to event listener
      *
      * @param  \Moo\FlashCardBundle\Entity\Card     $card
      * @param  \Moo\FlashCardBundle\Repository\Card $cardService

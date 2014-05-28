@@ -148,7 +148,7 @@ class CreateCategoryCommand extends AbstractCommand
         $category = $this->getEntity();
         $category->setCreated();
         $category->setDescription($desc);
-        $category->setIsActive($active);
+        $category->setActive($active);
         $category->setTitle($title);
         if ($parent instanceof Entity\Category) {
             $category->setParent($parent);

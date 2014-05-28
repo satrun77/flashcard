@@ -171,7 +171,7 @@ class CreateCardCommand extends AbstractCommand
         $card->setTitle($title);
         $card->setContent($content);
         $card->setCategory($category);
-        $card->setIsActive($active);
+        $card->setActive($active);
         $card->setMetaKeywords($metaKeywords);
         $card->setMetaDescription($metaDesc);
         if ($slug !== null) {

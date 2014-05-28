@@ -171,7 +171,7 @@ class Card
      * @param  integer $isActive
      * @return Card
      */
-    public function setIsActive($isActive)
+    public function setActive($isActive)
     {
         $this->isActive = $isActive;
 
@@ -183,7 +183,7 @@ class Card
      *
      * @return integer
      */
-    public function getIsActive()
+    public function isActive()
     {
         return $this->isActive;
     }

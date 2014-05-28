@@ -53,7 +53,7 @@ class LoadCategoryData extends AbstractFixture implements OrderedFixtureInterfac
         $category = new Entity\Category;
         $category->setCreated();
         $category->setDescription($description);
-        $category->setIsActive($isActive);
+        $category->setActive($isActive);
         $category->setTitle($title);
         $category->setParent($parent);
 

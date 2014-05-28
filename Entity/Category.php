@@ -222,7 +222,7 @@ class Category
      * @param  integer  $isActive
      * @return Category
      */
-    public function setIsActive($isActive)
+    public function setActive($isActive)
     {
         $this->isActive = $isActive;
 
@@ -234,7 +234,7 @@ class Category
      *
      * @return integer
      */
-    public function getIsActive()
+    public function isActive()
     {
         return $this->isActive;
     }

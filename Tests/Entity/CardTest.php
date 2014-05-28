@@ -29,7 +29,7 @@ class CardTest extends AbstractWebTestCase
         $card = new Card;
         $card->setTitle($title);
         $card->setContent($content);
-        $card->setIsActive(true);
+        $card->setActive(true);
 
         $this->assertEquals($title, $card->getTitle());
     }
@@ -37,9 +37,9 @@ class CardTest extends AbstractWebTestCase
     public function testIsActive()
     {
         $card = new Card;
-        $card->setIsActive(true);
+        $card->setActive(true);
 
-        $this->assertTrue($card->getIsActive());
+        $this->assertTrue($card->isActive());
     }
 
     public function testMakingSlug()
