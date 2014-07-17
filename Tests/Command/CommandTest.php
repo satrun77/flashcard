@@ -21,6 +21,13 @@ use Moo\FlashCardBundle\Tests\AbstractWebTestCase;
 class CommandTest extends AbstractWebTestCase
 {
 
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->loadFixtures(array());
+    }
+
     public function testCreateCategoryExecute()
     {
         $categoryTile = 'Test Category ' . uniqid();
