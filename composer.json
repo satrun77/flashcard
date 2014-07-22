@@ -9,7 +9,7 @@
         {
             "name": "Mohamed Alsharaf",
             "email": "mohamed.alsharaf@gmail.com",
-            "homepage": "http://jamandcheese-on-phptoast.com",
+            "homepage": "http://my.geek.nz",
             "role": "Developer"
         }
     ],
@@ -36,7 +36,10 @@
         "doctrine/doctrine-fixtures-bundle": "~2.2"
     },
     "suggest": {
-        "moo/flashcardadmin-bundle": "Provides admin classes that be used with SonataAdminBundle."
+        "moo/flashcardadmin-bundle": "Provides admin classes that be used with SonataAdminBundle.",
+        "doctrine/doctrine-fixtures-bundle": "Required when using the fixture loading functionality.",
+        "doctrine/data-fixtures": "Required when using the fixture loading functionality.",
+        "liip/functional-test-bundle": "Required for bundle unit testing."
     },
     "autoload": {
         "psr-0": {"Moo\\FlashCardBundle": ""}
