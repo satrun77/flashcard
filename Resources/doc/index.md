@@ -22,5 +22,5 @@ This bundle is under the MIT license. View the [LICENSE.md](LICENSE.md) file for
 
 <a name="demo"/>
 ## Demos
-- Use of the RESTful API to search for a card. [Demo 1](http://jamandcheese-on-phptoast.com/flashcard/example.html)
-- FlashCardBundle [Demo 2](http://jamandcheese-on-phptoast.com/flashcard)
+- Use of the RESTful API to search for a card. [Demo 1](http://flashcard.my.geek.nz/example.html)
+- FlashCardBundle [Demo 2](http://flashcard.my.geek.nz/)

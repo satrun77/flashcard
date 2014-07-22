@@ -8,7 +8,7 @@ Add the following to your composer.json:
 ```yml
 {
     "require": {
-        "moo/flashcard-bundle": "*"
+        "moo/flashcard-bundle": "~1.0"
     }
 }
 ```
@@ -55,16 +55,18 @@ public function registerBundles()
 {
     $bundles = array(
         // ...
-        new JMS\SerializerBundle\JMSSerializerBundle(),
+        new JMS\SerializerBundle\JMSSerializerBundle($this),
         new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
         new FOS\RestBundle\FOSRestBundle(),
         new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
         new Moo\FlashCardBundle\MooFlashCardBundle(),
     );
 
+    // If you want to unit test the bundle.
     if (in_array($this->getEnvironment(), array('dev', 'test'))) {
         // ...
         $bundles[] = new Liip\FunctionalTestBundle\LiipFunctionalTestBundle();
+        $bundles[] = new Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle();
     }
 }
 ```

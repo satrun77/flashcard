@@ -10,3 +10,8 @@ Change log
     - Search for cards in paginated results.
     - Search for a card.
     - Return a random selection of cards.
+
+## Version 1.0.1
+- Minor changes to composer.json
+- Minor change to doc files.
+- Added travis-ci support.
