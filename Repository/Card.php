@@ -61,8 +61,8 @@ class Card extends EntityRepository implements PaginatorAwareInterface
         $query = $this->getEntityManager()->createQueryBuilder();
         $query->select('p, c')->from('MooFlashCardBundle:Card', 'p');
         $query->join('p.category', 'c');
-        $query->where('p.isActive = 1');
-        $query->where('c.isActive = 1');
+        $query->where('p.active = 1');
+        $query->where('c.active = 1');
         $query->orderBy('p.id', 'ASC');
 
         return $query;
@@ -82,8 +82,8 @@ class Card extends EntityRepository implements PaginatorAwareInterface
         $query->where('p.content LIKE :name');
         $query->orWhere('p.title LIKE :name');
         $query->orWhere('p.slug LIKE :name');
-        $query->andWhere('p.isActive = 1');
-        $query->andWhere('c.isActive = 1');
+        $query->andWhere('p.active = 1');
+        $query->andWhere('c.active = 1');
         $query->setParameter('name', '%' . $search . '%');
         $query->orderBy('p.id', 'ASC');
 
@@ -176,8 +176,8 @@ class Card extends EntityRepository implements PaginatorAwareInterface
         $query->select('p, c')->from('MooFlashCardBundle:Card', 'p');
         $query->join('p.category', 'c');
         $query->where('p.id >= :rand');
-        $query->andWhere('p.isActive = 1');
-        $query->andWhere('c.isActive = 1');
+        $query->andWhere('p.active = 1');
+        $query->andWhere('c.active = 1');
         $query->setParameter('rand', mt_rand(0, $max - $limit));
         $query->setMaxResults($limit);
         $query->orderBy('p.id', 'ASC');

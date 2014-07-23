@@ -77,9 +77,9 @@ class Category
     /**
      * @var integer
      *
-     * @ORM\Column(name="is_active", type="boolean", nullable=true)
+     * @ORM\Column(name="active", type="boolean", nullable=true)
      */
-    private $isActive = false;
+    private $active = false;
 
     /**
      * @var \Moo\FlashCardBundle\Entity\Category
@@ -224,7 +224,7 @@ class Category
      */
     public function setActive($isActive)
     {
-        $this->isActive = $isActive;
+        $this->active = $isActive;
 
         return $this;
     }
@@ -236,7 +236,7 @@ class Category
      */
     public function isActive()
     {
-        return $this->isActive;
+        return $this->active;
     }
 
     /**

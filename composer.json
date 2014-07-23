@@ -39,7 +39,9 @@
         "moo/flashcardadmin-bundle": "Provides admin classes that be used with SonataAdminBundle.",
         "doctrine/doctrine-fixtures-bundle": "Required when using the fixture loading functionality.",
         "doctrine/data-fixtures": "Required when using the fixture loading functionality.",
-        "liip/functional-test-bundle": "Required for bundle unit testing."
+        "liip/functional-test-bundle": "Required for bundle unit testing.",
+        "doctrine/migrations": "Required for database migration.",
+        "doctrine/doctrine-migrations-bundle": "Required for database migration."
     },
     "autoload": {
         "psr-0": {"Moo\\FlashCardBundle": ""}

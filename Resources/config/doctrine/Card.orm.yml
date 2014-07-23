@@ -21,10 +21,10 @@ Moo\FlashCardBundle\Entity\Card:
                 style: default
                 fields:
                   - title
-        isActive:
+        active:
             type: boolean
             nullable: true
-            column: is_active
+            column: active
             default: false
         title:
             type: string

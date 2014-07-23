@@ -51,9 +51,9 @@ class Card
     /**
      * @var boolean
      *
-     * @ORM\Column(name="is_active", type="boolean", nullable=false)
+     * @ORM\Column(name="active", type="boolean", nullable=false)
      */
-    private $isActive = false;
+    private $active = false;
 
     /**
      * @var string
@@ -173,7 +173,7 @@ class Card
      */
     public function setActive($isActive)
     {
-        $this->isActive = $isActive;
+        $this->active = $isActive;
 
         return $this;
     }
@@ -185,7 +185,7 @@ class Card
      */
     public function isActive()
     {
-        return $this->isActive;
+        return $this->active;
     }
 
     /**

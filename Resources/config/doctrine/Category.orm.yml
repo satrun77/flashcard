@@ -24,10 +24,10 @@ Moo\FlashCardBundle\Entity\Category:
         updated:
             type: datetime
             nullable: false
-        isActive:
+        active:
             type: boolean
             nullable: true
-            column: is_active
+            column: active
             default: false
     oneToMany:
         cards:
