@@ -189,7 +189,7 @@ class CreateCardCommand extends AbstractCommand
         }
 
         // insert card into the database
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $em->persist($card);
         $em->flush();
 
