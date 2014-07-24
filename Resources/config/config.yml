@@ -9,7 +9,7 @@ services:
 
 # application general configuration
 parameters:
-    flashcard.app.version: 1.0.1
+    flashcard.app.version: 1.0.2
     flashcard.app.name: "Moo FlashCard"
 
 # Twig Configuration

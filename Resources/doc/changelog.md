@@ -15,3 +15,7 @@ Change log
 - Minor changes to composer.json
 - Minor change to doc files.
 - Added travis-ci support.
+
+## Version 1.0.2
+- Rename property "is_active" in Card and Category entity to "active".
+- Compatible with v1.0.2 MooFlashCardAdminBundle
