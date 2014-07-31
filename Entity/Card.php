@@ -119,6 +119,7 @@ class Card
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      * })
+     * @Assert\NotBlank()
      */
     private $category;
 
