@@ -27,14 +27,13 @@ class RestApiControllerTest extends AbstractWebTestCase
         parent::setUp();
 
         $this->loadFixtures(array(
-            'Moo\FlashCardBundle\DataFixtures\ORM\LoadCategoryData',
-            'Moo\FlashCardBundle\DataFixtures\ORM\LoadCardData',
+            'Moo\FlashCardBundle\DataFixtures\ORM\LoadApiData',
         ));
 
         $this->baseUrl = $this->getUrl('moo_flashcard_index') . 'api/';
     }
 
-    public function testGetAnyCardJson()
+    public function testGetAnyCard()
     {
         $client = static::createClient();
 
@@ -45,9 +44,10 @@ class RestApiControllerTest extends AbstractWebTestCase
 
         $this->assertCount($count, $data->content);
         $this->assertEquals(200, $data->code);
+        $this->assertSuccessfulResponse($client->getResponse(), 'json');
     }
 
-    public function testSearchValidCardsJson()
+    public function testSearchValidCards()
     {
         $client = static::createClient();
 
@@ -59,23 +59,10 @@ class RestApiControllerTest extends AbstractWebTestCase
 
         $this->assertGreaterThan(0, count($data->content));
         $this->assertEquals(200, $data->code);
+        $this->assertSuccessfulResponse($client->getResponse(), 'json');
     }
 
-    public function testSearchInvalidCardsJson()
-    {
-        $client = static::createClient();
-
-        $count = 10;
-        $query = 'card' . uniqid();
-        $client->request('GET', $this->baseUrl . 'cards.json?limit=' . $count . '&query=' . $query);
-
-        $data = json_decode($client->getResponse()->getContent());
-
-        $this->assertEquals(0, count($data->content));
-        $this->assertEquals(404, $data->code);
-    }
-
-    public function testSearchValidCardJson()
+    public function testSearchValidCard()
     {
         $client = static::createClient();
 
@@ -87,9 +74,41 @@ class RestApiControllerTest extends AbstractWebTestCase
         $this->assertObjectHasAttribute('content', $data);
         $this->assertInstanceOf('stdClass', $data->content);
         $this->assertEquals(200, $data->code);
+        $this->assertSuccessfulResponse($client->getResponse(), 'json');
     }
 
-    public function testSearchInvalidCardJson()
+    public function testSearchValidCardAsPopup()
+    {
+        $client = static::createClient();
+
+        $query = 'card';
+        $crawler = $client->request('GET', $this->baseUrl . 'card.html?query=' . $query . '&popup=1');
+
+        $this->assertSuccessfulResponse($client->getResponse(), 'html');
+        $this->assertTrue($crawler->filter('.fc-card.popup .close')->count() > 0);
+    }
+
+    public function testSearchInvalidCards()
+    {
+        $client = static::createClient();
+
+        $count = 10;
+        $query = 'card' . uniqid();
+
+        // JSON request
+        $client->request('GET', $this->baseUrl . 'cards.json?limit=' . $count . '&query=' . $query);
+        $data = json_decode($client->getResponse()->getContent());
+
+        $this->assertNotFoundResponse($client->getResponse(), 'json');
+        $this->assertEquals(0, count($data->content));
+        $this->assertEquals(404, $data->code);
+
+        // HTML request
+        $client->request('GET', $this->baseUrl . 'cards.html?limit=' . $count . '&query=' . $query);
+        $this->assertNotFoundResponse($client->getResponse(), 'html');
+    }
+
+    public function testSearchInvalidCard()
     {
         $client = static::createClient();
 
@@ -98,18 +117,47 @@ class RestApiControllerTest extends AbstractWebTestCase
 
         $data = json_decode($client->getResponse()->getContent());
 
+        $this->assertNotFoundResponse($client->getResponse(), 'json');
         $this->assertFalse(isset($data->content));
         $this->assertEquals(404, $data->code);
+
+        // HTML request
+        $client->request('GET', $this->baseUrl . 'card.html?query=' . $query);
+        $this->assertNotFoundResponse($client->getResponse(), 'html');
     }
 
-    public function testSearchValidCardAsPopupJson()
+    public function testRandomCards()
     {
         $client = static::createClient();
 
-        $query = 'card';
-        $crawler = $client->request('GET', $this->baseUrl . 'card.html?query=' . $query . '&popup=1');
+        $client->request('GET', $this->baseUrl . 'cards/random.json?&limit=1');
 
-        $this->assertTrue($crawler->filter('.fc-card.popup .close')->count() > 0);
+        $data = json_decode($client->getResponse()->getContent());
+
+        $this->assertSuccessfulResponse($client->getResponse(), 'json');
+        $this->assertEquals(200, $data->code);
+        $this->assertCount(1, $data->content);
+    }
+
+    protected function getContentType($type)
+    {
+        if ($type == 'json') {
+            return 'application/json';
+        }
+
+        return 'text/html; charset=UTF-8';
+    }
+
+    protected function assertSuccessfulResponse($response, $type = 'json')
+    {
+        $this->assertTrue($response->isSuccessful());
+        $this->assertEquals($this->getContentType($type), $response->headers->get('Content-Type'));
+    }
+
+    protected function assertNotFoundResponse($response, $type = 'json')
+    {
+        $this->assertTrue($response->isNotFound());
+        $this->assertEquals($this->getContentType($type), $response->headers->get('Content-Type'));
     }
 
 }

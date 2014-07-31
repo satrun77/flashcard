@@ -32,6 +32,8 @@ class CardTest extends AbstractWebTestCase
         $card->setActive(true);
 
         $this->assertEquals($title, $card->getTitle());
+        $this->assertEquals($content, $card->getContent());
+        $this->assertEmpty($card->getMetaKeywords());
     }
 
     public function testIsActive()
@@ -45,14 +47,17 @@ class CardTest extends AbstractWebTestCase
     public function testMakingSlug()
     {
         $this->loadFixtures(array(
-            'Moo\FlashCardBundle\DataFixtures\ORM\LoadCategoryData',
-            'Moo\FlashCardBundle\DataFixtures\ORM\LoadCardData',
+            'Moo\FlashCardBundle\DataFixtures\ORM\LoadMakingSlug',
         ));
 
         $cardService = $this->get('moo_flashcard.card.repository');
         $card = $cardService->findOneBySlugJoinedToCategory('card-1');
 
+        $this->assertEquals('card-1', $card->getSlug());
         $this->assertInstanceOf('\Moo\FlashCardBundle\Entity\Card', $card);
+        $this->assertInstanceOf('\DateTime', $card->getCreated());
+        $this->assertInstanceOf('\DateTime', $card->getUpdated());
+        $this->assertInstanceOf('\Moo\FlashCardBundle\Entity\Category', $card->getCategory());
     }
 
 }

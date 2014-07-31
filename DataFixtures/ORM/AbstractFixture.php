@@ -11,36 +11,23 @@
 
 namespace Moo\FlashCardBundle\DataFixtures\ORM;
 
-use Doctrine\Common\DataFixtures\AbstractFixture;
+use Doctrine\Common\DataFixtures\AbstractFixture as DectrineAbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
-use Doctrine\Common\Persistence\ObjectManager;
 use Moo\FlashCardBundle\Entity;
 
 /**
- * LoadCardData used to load card fixtures. Mostly used for load test data in PHP Unit Test.
+ * AbstractFixture contains abstracted/helper methods that are needed for the load fixture classes.
  *
  * @author Mohamed Alsharaf <mohamed.alsharaf@gmail.com>
  */
-class LoadCardData extends AbstractFixture implements OrderedFixtureInterface
+abstract class AbstractFixture extends DectrineAbstractFixture implements OrderedFixtureInterface
 {
 
-    public function load(ObjectManager $manager)
-    {
-        $category = $this->getReference('category1');
-        $card1 = $this->createCard('Card 1', $category, 'Card 1...', '', '');
-        $card2 = $this->createCard('Card 2', $category, 'Card 2...', '', '');
-
-        $manager->persist($card1);
-        $manager->persist($card2);
-
-        $manager->flush();
-    }
-
     /**
-     * Helper method to create a card
+     * Helper method to create a card.
      *
      * @param  type                             $title
-     * @param  type                             $categoryId
+     * @param  type                             $category
      * @param  type                             $content
      * @param  type                             $keywords
      * @param  type                             $description
@@ -68,11 +55,29 @@ class LoadCardData extends AbstractFixture implements OrderedFixtureInterface
     }
 
     /**
-     * {@inheritDoc}
+     * Helper method to create a category.
+     *
+     * @param  type                                 $title
+     * @param  type                                 $description
+     * @param  type                                 $parent
+     * @param  type                                 $isActive
+     * @return \Moo\FlashCardBundle\Entity\Category
      */
+    protected function createCategory($title, $description, $parent = null, $isActive = 1)
+    {
+        $category = new Entity\Category;
+        $category->setCreated();
+        $category->setDescription($description);
+        $category->setActive($isActive);
+        $category->setTitle($title);
+        $category->setParent($parent);
+
+        return $category;
+    }
+
     public function getOrder()
     {
-        return 2; // the order in which fixtures will be loaded
+        return 1; // the order in which fixtures will be loaded
     }
 
 }
