@@ -71,7 +71,15 @@ class CreateCategoryCommand extends AbstractCommand
      */
     protected function interact(InputInterface $input, OutputInterface $output)
     {
-        $this->addArgumentsInteract($input, $output);
+        if (!$input->getArgument('title')) {
+            $value = $this->getHelper('dialog')->askAndValidate($output, 'Please enter (Title): ', array($this, 'validateTitle'), 1);
+            $input->setArgument('title', $value);
+        }
+
+        if (!$input->getArgument('parent')) {
+            $value = $this->getHelper('dialog')->askAndValidate($output, 'Please enter (Parent category ID): ', array($this, 'validateParent'), 1);
+            $input->setArgument('parent', $value);
+        }
     }
 
     /**
@@ -83,18 +91,15 @@ class CreateCategoryCommand extends AbstractCommand
      */
     public function validateTitle($value)
     {
+        // Set title to entity
         $this->getEntity()->setTitle($value);
 
-        $error = $this->validate($this->entity, 'title');
-        if ($error !== true) {
-            throw new \Exception($error);
-        }
-
-        // make sure the category title is new
-        $repository = $this->getRepository('category');
-        $exists = $repository->findOneByTitle($value);
-        if ($exists) {
-            throw new \Exception(sprintf("There is an existing category with the title '%s'.", $exists->getTitle()));
+        // Validate entity and return the first error found in property 'title'
+        $errors = $this->getValidator()->validate($this->entity);
+        foreach ($errors as $error) {
+            if ($error->getPropertyPath() == 'title') {
+                throw new \InvalidArgumentException($error->getMessage());
+            }
         }
 
         return $value;
@@ -109,16 +114,15 @@ class CreateCategoryCommand extends AbstractCommand
      */
     public function validateParent($value)
     {
-        if ($value < 0) {
-            throw new \Exception('The parent category ID must be a positve integer.');
+        if ($value < 0 && ($value !== '' || $value !== null)) {
+            throw new \InvalidArgumentException('The parent category ID must be a positve integer.');
         }
 
         if ($value > 0) {
-            $repository = $this->getRepository('category');
-            $value = $repository->find($value);
-            if (!$value) {
-                throw new \Exception('The parent category ID is invalid.');
+            if (!($parent = $this->getRepository('category')->find($value))) {
+                throw new \InvalidArgumentException('The parent category ID is invalid.');
             }
+            $this->getEntity()->setParent($parent);
         }
 
         return $value;
@@ -134,41 +138,34 @@ class CreateCategoryCommand extends AbstractCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $repository = $this->getRepository('category');
-
-        // parameters
-        $title = $input->getArgument('title');
-        $desc = $input->getArgument('desc');
-        $parent = $input->getArgument('parent');
-        if (!$parent instanceof Entity\Category && null !== $parent) {
-            $parent = $repository->find($parent);
-        }
-        $active = (boolean) $input->getOption('active');
-
-        // setup category entity
         $category = $this->getEntity();
+        $parent = $input->getArgument('parent');
+
+        // Setup category entity
         $category->setCreated();
-        $category->setDescription($desc);
-        $category->setActive($active);
-        $category->setTitle($title);
-        if ($parent instanceof Entity\Category) {
-            $category->setParent($parent);
+        $category->setTitle($input->getArgument('title'));
+        $category->setDescription($input->getArgument('desc'));
+        $category->setActive((boolean) $input->getOption('active'));
+        if (!$input->isInteractive() && $parent > 0) {
+            $category->setParent($repository->find($parent));
         }
 
+        // Valid category
         $errors = $this->getValidator()->validate($category);
         if (count($errors) > 0) {
             foreach ($errors as $error) {
                 $this->error($output, $error);
             }
 
-            return false;
+            return;
         }
 
-        // insert category into the database
+        // Insert category into the database
         $em = $this->getDoctrine()->getManager();
         $em->persist($category);
         $em->flush();
 
-        return $this->success($output, "Voila... You have created a new category.");
+        $this->success($output, "Voila... You have created a new category.");
     }
 
 }

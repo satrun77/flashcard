@@ -13,7 +13,6 @@ namespace Moo\FlashCardBundle\Command;
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputInterface;
 
 /**
  * AbstractCommand contains abstracted/helper methods that are needed for a command line object.
@@ -82,35 +81,6 @@ abstract class AbstractCommand extends ContainerAwareCommand
     }
 
     /**
-     * Add dialog interaction for each argument in the command with optional validation
-     *
-     * @param  \Symfony\Component\Console\Input\InputInterface   $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface $output
-     * @param  type                                              $value
-     * @return type
-     */
-    protected function addArgumentsInteract(InputInterface $input, OutputInterface $output)
-    {
-        $arguments = $this->getDefinition()->getArguments();
-        foreach ($arguments as $argument) {
-            $name = $argument->getName();
-            $method = 'validate' . ucfirst($name);
-            if (!$input->getArgument($name)) {
-                $calback = function ($value) {
-                    return $value;
-                };
-                if (method_exists($this, $method)) {
-                    $calback = array($this, $method);
-                }
-                $value = $this->getHelper('dialog')->askAndValidate(
-                        $output, 'Please enter (' . $argument->getDescription() . '): ', $calback, false, $argument->getDefault()
-                );
-                $input->setArgument($name, $value);
-            }
-        }
-    }
-
-    /**
      * Get instance of Validator
      *
      * @return \Symfony\Component\Validator\Validator
@@ -130,9 +100,9 @@ abstract class AbstractCommand extends ContainerAwareCommand
      * @param  object  $entity
      * @return boolean
      */
-    protected function validate($entity, $propertyName)
+    protected function validate($entity, $propertyName, $groups = null)
     {
-        $violations = $this->getValidator()->validateProperty($entity, $propertyName);
+        $violations = $this->getValidator()->validateProperty($entity, $propertyName, $groups);
         if (count($violations) > 0) {
             return $violations[0];
         }

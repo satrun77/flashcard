@@ -74,7 +74,20 @@ class CreateCardCommand extends AbstractCommand
      */
     protected function interact(InputInterface $input, OutputInterface $output)
     {
-        $this->addArgumentsInteract($input, $output);
+        if (!$input->getArgument('title')) {
+            $value = $this->getHelper('dialog')->askAndValidate($output, 'Please enter (Title): ', array($this, 'validateTitle'), 1);
+            $input->setArgument('title', $value);
+        }
+
+        if (!$input->getArgument('content')) {
+            $value = $this->getHelper('dialog')->askAndValidate($output, 'Please enter (Content): ', array($this, 'validateContent'), 1);
+            $input->setArgument('content', $value);
+        }
+
+        if (!$input->getArgument('category')) {
+            $value = $this->getHelper('dialog')->askAndValidate($output, 'Please enter (Category ID): ', array($this, 'validateCategory'), 1);
+            $input->setArgument('category', $value);
+        }
     }
 
     /**
@@ -90,7 +103,7 @@ class CreateCardCommand extends AbstractCommand
 
         $error = $this->validate($this->entity, 'title');
         if ($error !== true) {
-            throw new \Exception($error);
+            throw new \InvalidArgumentException($error);
         }
 
         return $value;
@@ -109,7 +122,7 @@ class CreateCardCommand extends AbstractCommand
 
         $error = $this->validate($this->entity, 'content');
         if ($error !== true) {
-            throw new \Exception($error);
+            throw new \InvalidArgumentException($error);
         }
 
         return $value;
@@ -124,16 +137,16 @@ class CreateCardCommand extends AbstractCommand
      */
     public function validateCategory($value)
     {
-        $value = $this->getRepository('category')->find($value);
-        if (!$value) {
-            throw new \Exception('The category ID is invalid.');
+        $category = $this->getRepository('category')->find($value);
+        if (!$category) {
+            throw new \InvalidArgumentException('The category ID is invalid.');
         }
 
-        $this->getEntity()->setCategory($value);
+        $this->getEntity()->setCategory($category);
 
         $error = $this->validate($this->entity, 'category');
         if ($error !== true) {
-            throw new \Exception($error);
+            throw new \InvalidArgumentException($error);
         }
 
         return $value;
@@ -148,47 +161,33 @@ class CreateCardCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        // parameters
-        $title = $input->getArgument('title');
-        $content = $input->getArgument('content');
-        $category = $input->getArgument('category');
-        $slug = $input->getArgument('slug');
-        $metaKeywords = $input->getArgument('keywords');
-        $metaDesc = $input->getArgument('description');
-        $active = (boolean) $input->getOption('active');
-
-        if (!$category instanceof Entity\Category) {
-            // check if category id is valid
-            $category = $this->getRepository('category')->find($category);
-            if (!$category) {
-                return $this->error($output, "Invalid category Id '%id%'", array('%id%' => $input->getArgument('category')));
-            }
-        }
-
-        // setup card entity
+        // Setup card entity
         $card = $this->getEntity();
         $card->setCreated();
-        $card->setTitle($title);
-        $card->setContent($content);
-        $card->setCategory($category);
-        $card->setActive($active);
-        $card->setMetaKeywords($metaKeywords);
-        $card->setMetaDescription($metaDesc);
-        if ($slug !== null) {
+        $card->setTitle($input->getArgument('title'));
+        $card->setContent($input->getArgument('content'));
+        $card->setActive((boolean) $input->getOption('active'));
+        $card->setMetaKeywords($input->getArgument('keywords'));
+        $card->setMetaDescription($input->getArgument('description'));
+        $card->setViews(0);
+        if (!$input->isInteractive()) {
+            $card->setCategory($this->getRepository('category')->find($input->getArgument('category')));
+        }
+        if (($slug = $input->getArgument('slug')) !== null) {
             $card->setSlug($slug);
         }
-        $card->setViews(0);
 
+        // Valid category
         $errors = $this->getValidator()->validate($card);
         if (count($errors) > 0) {
             foreach ($errors as $error) {
                 $this->error($output, $error);
             }
 
-            return false;
+            return;
         }
 
-        // insert card into the database
+        // Insert category into the database
         $em = $this->getDoctrine()->getManager();
         $em->persist($card);
         $em->flush();
