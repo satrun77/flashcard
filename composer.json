@@ -46,6 +46,5 @@
     "autoload": {
         "psr-0": {"Moo\\FlashCardBundle": ""}
     },
-    "target-dir": "Moo/FlashCardBundle",
-    "minimum-stability": "dev"
+    "target-dir": "Moo/FlashCardBundle"
 }
