@@ -169,7 +169,7 @@ class Card
     /**
      * Set isActive
      *
-     * @param  integer $isActive
+     * @param  boolean $isActive
      * @return Card
      */
     public function setActive($isActive)
@@ -182,7 +182,7 @@ class Card
     /**
      * Get isActive
      *
-     * @return integer
+     * @return boolean
      */
     public function isActive()
     {

@@ -24,7 +24,7 @@ class DefaultControllerTest extends AbstractWebTestCase
     public function testViewACardDetails()
     {
         $this->loadFixtures(array(
-            'Moo\FlashCardBundle\DataFixtures\ORM\LoadViewACardDetails',
+            'Moo\FlashCardBundle\DataFixtures\ORM\LoadCreateCard',
         ));
 
         $client = static::createClient();
@@ -38,7 +38,7 @@ class DefaultControllerTest extends AbstractWebTestCase
     public function testViewIndex()
     {
         $this->loadFixtures(array(
-            'Moo\FlashCardBundle\DataFixtures\ORM\LoadViewIndex',
+            'Moo\FlashCardBundle\DataFixtures\ORM\LoadCategoryCards',
         ));
 
         $client = static::createClient();

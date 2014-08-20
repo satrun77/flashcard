@@ -175,27 +175,27 @@ class RestApiController extends FOSRestController
     /**
      * Return request format 'e.g. html, json)
      *
-     * @param  type   $view
+     * @param  \FOS\RestBundle\View\View $view
      * @return string
      */
-    protected function getRequestFormat($view)
+    protected function getRequestFormat(\FOS\RestBundle\View\View $view)
     {
         $request = $this->getRequest();
 
-        return ($view->getFormat() ? : $request->getRequestFormat());
+        return ($view->getFormat() ?: $request->getRequestFormat());
     }
 
     /**
      * Create the web service response
      *
-     * @param  mix                                        $content
+     * @param  array|null|object                          $content
      * @param  string                                     $errorMessage
      * @param  int                                        $code
      * @return \Moo\FlashCardBundle\Response\RestResponse
      */
     protected function createResponse($content, $errorMessage = '', $code = null)
     {
-        $response = new RestResponse;
+        $response = new RestResponse();
         $response->content = $content;
         if (!$content) {
             $response->code = 404;

@@ -14,11 +14,11 @@ namespace Moo\FlashCardBundle\DataFixtures\ORM;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
- * LoadMakingSlug used to load fixtures for making slug test case.
+ * LoadCategoryCards used to load fixtures with one category & n cards for any test case that requires these data to exists in the database.
  *
  * @author Mohamed Alsharaf <mohamed.alsharaf@gmail.com>
  */
-class LoadMakingSlug extends AbstractFixture
+class LoadCategoryCards extends AbstractFixture
 {
 
     public function load(ObjectManager $manager)
@@ -27,7 +27,9 @@ class LoadMakingSlug extends AbstractFixture
         $manager->persist($category);
 
         $card1 = $this->createCard('Card 1', $category, 'Card 1...', '', '');
+        $card2 = $this->createCard('Card 2', $category, 'Card 2...', '', '');
         $manager->persist($card1);
+        $manager->persist($card2);
 
         $manager->flush();
     }

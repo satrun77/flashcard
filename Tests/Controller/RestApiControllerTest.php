@@ -27,7 +27,7 @@ class RestApiControllerTest extends AbstractWebTestCase
         parent::setUp();
 
         $this->loadFixtures(array(
-            'Moo\FlashCardBundle\DataFixtures\ORM\LoadApiData',
+            'Moo\FlashCardBundle\DataFixtures\ORM\LoadCategoryCards',
         ));
 
         $this->baseUrl = $this->getUrl('moo_flashcard_index') . 'api/';

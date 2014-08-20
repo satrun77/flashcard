@@ -47,7 +47,7 @@ class CardTest extends AbstractWebTestCase
     public function testMakingSlug()
     {
         $this->loadFixtures(array(
-            'Moo\FlashCardBundle\DataFixtures\ORM\LoadMakingSlug',
+            'Moo\FlashCardBundle\DataFixtures\ORM\LoadCreateCard',
         ));
 
         $cardService = $this->get('moo_flashcard.card.repository');

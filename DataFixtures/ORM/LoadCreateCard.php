@@ -14,11 +14,11 @@ namespace Moo\FlashCardBundle\DataFixtures\ORM;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
- * LoadViewIndex used to load fixtures for view index page test case.
+ * LoadCreateCard used to load fixtures with one card for any test case that requires a card to exists in the database.
  *
  * @author Mohamed Alsharaf <mohamed.alsharaf@gmail.com>
  */
-class LoadViewIndex extends AbstractFixture
+class LoadCreateCard extends AbstractFixture
 {
 
     public function load(ObjectManager $manager)
@@ -27,9 +27,7 @@ class LoadViewIndex extends AbstractFixture
         $manager->persist($category);
 
         $card1 = $this->createCard('Card 1', $category, 'Card 1...', '', '');
-        $card2 = $this->createCard('Card 2', $category, 'Card 2...', '', '');
         $manager->persist($card1);
-        $manager->persist($card2);
 
         $manager->flush();
     }

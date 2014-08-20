@@ -26,17 +26,17 @@ abstract class AbstractFixture extends DectrineAbstractFixture implements Ordere
     /**
      * Helper method to create a card.
      *
-     * @param  type                             $title
-     * @param  type                             $category
-     * @param  type                             $content
-     * @param  type                             $keywords
-     * @param  type                             $description
-     * @param  type                             $slug
-     * @param  type                             $isActive
-     * @param  type                             $views
+     * @param  string                               $title
+     * @param  \Moo\FlashCardBundle\Entity\Category $category
+     * @param  string                               $content
+     * @param  string                               $keywords
+     * @param  string                               $description
+     * @param  string                               $slug
+     * @param  boolean                              $isActive
+     * @param  int                                  $views
      * @return \Moo\FlashCardBundle\Entity\Card
      */
-    protected function createCard($title, $category, $content, $keywords, $description, $slug = null, $isActive = 1, $views = 0)
+    protected function createCard($title, $category, $content, $keywords, $description, $slug = null, $isActive = true, $views = 0)
     {
         $card = new Entity\Card;
         $card->setCreated();
@@ -57,13 +57,13 @@ abstract class AbstractFixture extends DectrineAbstractFixture implements Ordere
     /**
      * Helper method to create a category.
      *
-     * @param  type                                 $title
-     * @param  type                                 $description
-     * @param  type                                 $parent
-     * @param  type                                 $isActive
+     * @param  string                               $title
+     * @param  string                               $description
+     * @param  \Moo\FlashCardBundle\Entity\Category $parent
+     * @param  int                                  $isActive
      * @return \Moo\FlashCardBundle\Entity\Category
      */
-    protected function createCategory($title, $description, $parent = null, $isActive = 1)
+    protected function createCategory($title, $description, $parent = null, $isActive = true)
     {
         $category = new Entity\Category;
         $category->setCreated();
