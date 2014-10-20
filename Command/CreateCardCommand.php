@@ -38,7 +38,7 @@ class CreateCardCommand extends AbstractCommand
      */
     protected function getEntity()
     {
-        if (null == $this->entity) {
+        if (null === $this->entity) {
             $this->entity = new Entity\Card;
         }
 
