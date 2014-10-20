@@ -87,7 +87,7 @@ abstract class AbstractCommand extends ContainerAwareCommand
      */
     protected function getValidator()
     {
-        if (null == $this->validator) {
+        if (null === $this->validator) {
             $this->validator = $this->getContainer()->get('validator');
         }
 
