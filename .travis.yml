@@ -8,9 +8,9 @@ php:
 env:
   - SYMFONY_VERSION=2.5.*
   - SYMFONY_VERSION=2.6.*
-  - SYMFONY_VERSION=2.7.*
 
 before_script:
+  - composer self-update
   - composer require symfony/symfony:${SYMFONY_VERSION} --prefer-dist
   - composer install --dev --prefer-dist
 
@@ -19,3 +19,4 @@ script: phpunit --coverage-clover=coverage.clover
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
   - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
+
