@@ -19,3 +19,9 @@ Change log
 ## Version 1.0.2
 - Rename property "is_active" in Card and Category entity to "active".
 - Compatible with v1.0.2 MooFlashCardAdminBundle
+
+## Version 1.0.3
+- Bug fixes.
+- New test cases.
+- Code quality changes.
+
