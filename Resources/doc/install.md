@@ -16,7 +16,7 @@ Add the following to your composer.json:
 Install the bundle by executing the following command:
 
 ``` bash
-$ php composer.phar update moo/flashcard-bundle
+$ php composer.phar require moo/flashcard-bundle
 ```
 
 ### 2. Add the bundle configurations.
