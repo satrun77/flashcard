@@ -21,19 +21,18 @@ use Moo\FlashCardBundle\Tests\AbstractWebTestCase;
  */
 class CategoryTest extends AbstractWebTestCase
 {
-
     public function testCreateCategory()
     {
-        $category = new Category;
+        $category = new Category();
         $category->setTitle('Title 1');
         $category->setDescription('Content 2');
-        $category->setCreated(new \DateTime);
+        $category->setCreated(new \DateTime());
         $category->setActive(true);
 
-        $subCategory = new Category;
+        $subCategory = new Category();
         $subCategory->setTitle('Title 2');
         $subCategory->setDescription('Content 2');
-        $subCategory->setCreated(new \DateTime);
+        $subCategory->setCreated(new \DateTime());
         $subCategory->setActive(false);
         $subCategory->setParent($category);
 
@@ -46,10 +45,10 @@ class CategoryTest extends AbstractWebTestCase
 
     public function testInsertingCategory()
     {
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         // Category instance
-        $category = new Category;
+        $category = new Category();
         $category->setCreated();
         $category->setTitle('Title 1');
         $category->setDescription('Content 1');
@@ -63,5 +62,4 @@ class CategoryTest extends AbstractWebTestCase
         $this->assertGreaterThan(0, $category->getId());
         $this->assertEquals($category->getUpdated()->getTimestamp(), $category->getCreated()->getTimestamp());
     }
-
 }

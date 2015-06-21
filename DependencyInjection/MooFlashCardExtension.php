@@ -23,7 +23,6 @@ use Symfony\Component\DependencyInjection\Loader;
  */
 class MooFlashCardExtension extends Extension
 {
-
     /**
      * {@inheritDoc}
      */
@@ -35,5 +34,4 @@ class MooFlashCardExtension extends Extension
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.yml');
     }
-
 }

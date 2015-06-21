@@ -14,13 +14,13 @@ namespace Moo\FlashCardBundle\DataFixtures\ORM;
 use Doctrine\Common\Persistence\ObjectManager;
 
 /**
- * LoadCreateCategory used to load fixtures with one category for any test case that requires a category to exists in the database.
+ * LoadCreateCategory used to load fixtures with one category for any test case that requires a category to exists in
+ * the database.
  *
  * @author Mohamed Alsharaf <mohamed.alsharaf@gmail.com>
  */
 class LoadCreateCategory extends AbstractFixture
 {
-
     public function load(ObjectManager $manager)
     {
         $category = $this->createCategory('Category 1', '');
@@ -28,5 +28,4 @@ class LoadCreateCategory extends AbstractFixture
 
         $manager->flush();
     }
-
 }

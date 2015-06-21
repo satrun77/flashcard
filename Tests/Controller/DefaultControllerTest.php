@@ -20,26 +20,25 @@ use Moo\FlashCardBundle\Tests\AbstractWebTestCase;
  */
 class DefaultControllerTest extends AbstractWebTestCase
 {
-
     public function testViewACardDetails()
     {
-        $this->loadFixtures(array(
+        $this->loadFixtures([
             'Moo\FlashCardBundle\DataFixtures\ORM\LoadCreateCard',
-        ));
+        ]);
 
         $client = static::createClient();
 
         /** @var \Symfony\Component\DomCrawler\Crawler $crawler */
-        $crawler = $client->request('GET', $this->getUrl('moo_flashcard_card', array('slug' => 'card-1')));
+        $crawler = $client->request('GET', $this->getUrl('moo_flashcard_card', ['slug' => 'card-1']));
 
         $this->assertTrue($crawler->filter('html:contains("Card 1...")')->count() > 0);
     }
 
     public function testViewIndex()
     {
-        $this->loadFixtures(array(
+        $this->loadFixtures([
             'Moo\FlashCardBundle\DataFixtures\ORM\LoadCategoryCards',
-        ));
+        ]);
 
         $client = static::createClient();
 
@@ -52,13 +51,12 @@ class DefaultControllerTest extends AbstractWebTestCase
 
     public function testViewNotFoundCard()
     {
-        $this->loadFixtures(array());
+        $this->loadFixtures([]);
 
         $client = static::createClient();
 
-        $client->request('GET', $this->getUrl('moo_flashcard_card', array('slug' => 'card-1')));
+        $client->request('GET', $this->getUrl('moo_flashcard_card', ['slug' => 'card-1']));
 
         $this->assertTrue($client->getResponse()->isNotFound());
     }
-
 }

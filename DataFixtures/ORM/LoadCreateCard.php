@@ -20,7 +20,6 @@ use Doctrine\Common\Persistence\ObjectManager;
  */
 class LoadCreateCard extends AbstractFixture
 {
-
     public function load(ObjectManager $manager)
     {
         $category = $this->createCategory('Category 1', '');
@@ -31,5 +30,4 @@ class LoadCreateCard extends AbstractFixture
 
         $manager->flush();
     }
-
 }

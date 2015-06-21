@@ -31,7 +31,7 @@ abstract class AbstractCommand extends ContainerAwareCommand
     /**
      * Shortcut to return the Doctrine Registry service.
      *
-     * @return Registry
+     * @return \Doctrine\Bundle\DoctrineBundle\Registry
      */
     protected function getDoctrine()
     {
@@ -54,7 +54,7 @@ abstract class AbstractCommand extends ContainerAwareCommand
      * @param string $message
      * @param array  $params
      */
-    protected function trans($message, $params = array())
+    protected function trans($message, $params = [])
     {
         return $this->getContainer()->get('translator')->trans($message, $params);
     }
@@ -62,10 +62,13 @@ abstract class AbstractCommand extends ContainerAwareCommand
     /**
      * Writes an error message to the output and adds a newline at the end.
      *
-     * @param string $message
-     * @param array  $params
+     * @param OutputInterface $output
+     * @param string          $message
+     * @param array           $params
+     *
+     * @return mixed
      */
-    protected function error(OutputInterface $output, $message, $params = array())
+    protected function error(OutputInterface $output, $message, $params = [])
     {
         return $output->writeln('<error>' . $this->trans($message, $params) . '</error>');
     }
@@ -73,9 +76,13 @@ abstract class AbstractCommand extends ContainerAwareCommand
     /**
      * Writes an success message to the output and adds a newline at the end.
      *
-     * @param string $message
+     * @param OutputInterface $output
+     * @param string          $message
+     * @param array           $params
+     *
+     * @return mixed
      */
-    protected function success(OutputInterface $output, $message, $params = array())
+    protected function success(OutputInterface $output, $message, $params = [])
     {
         return $output->writeln('<info>' . $this->trans($message, $params) . '</info>');
     }
@@ -97,8 +104,11 @@ abstract class AbstractCommand extends ContainerAwareCommand
     /**
      * Validate a property of an entity
      *
-     * @param  object  $entity
-     * @return boolean
+     * @param object $entity
+     * @param string $propertyName
+     * @param null   $groups
+     *
+     * @return bool
      */
     protected function validate($entity, $propertyName, $groups = null)
     {
@@ -109,5 +119,4 @@ abstract class AbstractCommand extends ContainerAwareCommand
 
         return true;
     }
-
 }

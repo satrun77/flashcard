@@ -64,7 +64,7 @@ abstract class AbstractWebTestCase extends WebTestCase
      *
      * @param ContainerAwareCommand $command
      * @param DialogHelper          $dialog
-     * @param boolean               $reuseKernel
+     * @param bool                  $reuseKernel
      *
      * @return \CommandTester
      */
@@ -75,7 +75,7 @@ abstract class AbstractWebTestCase extends WebTestCase
                 static::$kernel->shutdown();
             }
 
-            $kernel = static::$kernel = $this->createKernel(array('environment' => $this->environment));
+            $kernel = static::$kernel = $this->createKernel(['environment' => $this->environment]);
             $kernel->boot();
         } else {
             $kernel = $this->getContainer()->get('kernel');
@@ -90,7 +90,7 @@ abstract class AbstractWebTestCase extends WebTestCase
 
         $commandTester = new CommandTester($command);
         $commandTester->execute(
-                array('command' => $command->getName())
+            ['command' => $command->getName()]
         );
 
         return $commandTester;
@@ -99,19 +99,20 @@ abstract class AbstractWebTestCase extends WebTestCase
     /**
      * Returns a mock object for console dialog helper
      *
-     * @param  string                                         $method
-     * @param  string                                         $value
-     * @param  array                                          $validator
+     * @param string $method
+     * @param string $value
+     * @param array  $validator
+     *
      * @return \Symfony\Component\Console\Helper\DialogHelper
      */
     protected function getMockDialogHelper($method, $value, $validator)
     {
-        $dialog = $this->getMock('Symfony\Component\Console\Helper\DialogHelper', array($method));
+        $dialog = $this->getMock('Symfony\Component\Console\Helper\DialogHelper', [$method]);
         $dialog->expects($this->any())
-                ->method($method)
-                ->will($this->returnCallback(function () use ($validator, $value) {
-                            return $validator[0]->$validator[1]($value);
-                        }));
+            ->method($method)
+            ->will($this->returnCallback(function () use ($validator, $value) {
+                return $validator[0]->$validator[1]($value);
+            }));
         $dialog->setInputStream($this->getInputStream($value));
 
         return $dialog;
@@ -120,7 +121,8 @@ abstract class AbstractWebTestCase extends WebTestCase
     /**
      * Get input stream for console interactive input
      *
-     * @param  string   $input
+     * @param string $input
+     *
      * @return resource of type stream
      */
     protected function getInputStream($input)
@@ -131,5 +133,4 @@ abstract class AbstractWebTestCase extends WebTestCase
 
         return $stream;
     }
-
 }

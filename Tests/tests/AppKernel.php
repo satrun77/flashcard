@@ -19,10 +19,9 @@ use Symfony\Component\Config\Loader\LoaderInterface;
  */
 class AppKernel extends Kernel
 {
-
     public function registerBundles()
     {
-        $bundles = array(
+        $bundles = [
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\AsseticBundle\AsseticBundle(),
@@ -35,7 +34,7 @@ class AppKernel extends Kernel
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
             new Moo\FlashCardBundle\MooFlashCardBundle(),
-        );
+        ];
 
         return $bundles;
     }
@@ -45,5 +44,4 @@ class AppKernel extends Kernel
         // Tests simple config file.
         $loader->load(__DIR__ . '/config.yml');
     }
-
 }

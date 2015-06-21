@@ -39,7 +39,7 @@ class CreateCardCommand extends AbstractCommand
     protected function getEntity()
     {
         if (null === $this->entity) {
-            $this->entity = new Entity\Card;
+            $this->entity = new Entity\Card();
         }
 
         return $this->entity;
@@ -54,16 +54,15 @@ class CreateCardCommand extends AbstractCommand
     protected function configure()
     {
         $this
-                ->setName('flashcard:card:create')
-                ->setDescription('Create a card')
-                ->addArgument('title', InputArgument::REQUIRED, 'The title of the card.')
-                ->addArgument('content', InputArgument::REQUIRED, 'The content of the card.')
-                ->addArgument('category', InputArgument::REQUIRED, 'The category ID the card is belong to.')
-                ->addArgument('keywords', InputArgument::OPTIONAL, 'Comma seperated keywords for the metadata tag.', null)
-                ->addArgument('description', InputArgument::OPTIONAL, 'The metadata description.', null)
-                ->addArgument('slug', InputArgument::OPTIONAL, 'The url slug of the card.', null)
-                ->addOption('active', null, InputOption::VALUE_NONE, 'If set, the card is going to be active.')
-        ;
+            ->setName('flashcard:card:create')
+            ->setDescription('Create a card')
+            ->addArgument('title', InputArgument::REQUIRED, 'The title of the card.')
+            ->addArgument('content', InputArgument::REQUIRED, 'The content of the card.')
+            ->addArgument('category', InputArgument::REQUIRED, 'The category ID the card is belong to.')
+            ->addArgument('keywords', InputArgument::OPTIONAL, 'Comma seperated keywords for the metadata tag.', null)
+            ->addArgument('description', InputArgument::OPTIONAL, 'The metadata description.', null)
+            ->addArgument('slug', InputArgument::OPTIONAL, 'The url slug of the card.', null)
+            ->addOption('active', null, InputOption::VALUE_NONE, 'If set, the card is going to be active.');
     }
 
     /**
@@ -75,17 +74,32 @@ class CreateCardCommand extends AbstractCommand
     protected function interact(InputInterface $input, OutputInterface $output)
     {
         if (!$input->getArgument('title')) {
-            $value = $this->getHelper('dialog')->askAndValidate($output, 'Please enter (Title): ', array($this, 'validateTitle'), 1);
+            $value = $this->getHelper('dialog')->askAndValidate(
+                $output,
+                'Please enter (Title): ',
+                [$this, 'validateTitle'],
+                1
+            );
             $input->setArgument('title', $value);
         }
 
         if (!$input->getArgument('content')) {
-            $value = $this->getHelper('dialog')->askAndValidate($output, 'Please enter (Content): ', array($this, 'validateContent'), 1);
+            $value = $this->getHelper('dialog')->askAndValidate(
+                $output,
+                'Please enter (Content): ',
+                [$this, 'validateContent'],
+                1
+            );
             $input->setArgument('content', $value);
         }
 
         if (!$input->getArgument('category')) {
-            $value = $this->getHelper('dialog')->askAndValidate($output, 'Please enter (Category ID): ', array($this, 'validateCategory'), 1);
+            $value = $this->getHelper('dialog')->askAndValidate(
+                $output,
+                'Please enter (Category ID): ',
+                [$this, 'validateCategory'],
+                1
+            );
             $input->setArgument('category', $value);
         }
     }
@@ -93,8 +107,10 @@ class CreateCardCommand extends AbstractCommand
     /**
      * Validate the card title
      *
-     * @param  string     $value
+     * @param string $value
+     *
      * @return string
+     *
      * @throws \Exception
      */
     public function validateTitle($value)
@@ -112,8 +128,10 @@ class CreateCardCommand extends AbstractCommand
     /**
      * Validate the card content
      *
-     * @param  string     $value
+     * @param string $value
+     *
      * @return string
+     *
      * @throws \Exception
      */
     public function validateContent($value)
@@ -131,8 +149,10 @@ class CreateCardCommand extends AbstractCommand
     /**
      * Validate the card category
      *
-     * @param  int             $value
+     * @param int $value
+     *
      * @return Entity\Category
+     *
      * @throws \Exception
      */
     public function validateCategory($value)
@@ -155,9 +175,10 @@ class CreateCardCommand extends AbstractCommand
     /**
      * Execute the command line to create a new card.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface   $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface $output
-     * @return boolean
+     * @param \Symfony\Component\Console\Input\InputInterface   $input
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     *
+     * @return bool
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -171,7 +192,9 @@ class CreateCardCommand extends AbstractCommand
         $card->setMetaDescription($input->getArgument('description'));
         $card->setViews(0);
         if (!$input->isInteractive()) {
-            $card->setCategory($this->getRepository('category')->find($input->getArgument('category')));
+            $card->setCategory(
+                $this->getRepository('category')->find($input->getArgument('category'))
+            );
         }
         if (($slug = $input->getArgument('slug')) !== null) {
             $card->setSlug($slug);
@@ -184,7 +207,7 @@ class CreateCardCommand extends AbstractCommand
                 $this->error($output, $error);
             }
 
-            return;
+            return 1;
         }
 
         // Insert category into the database
@@ -192,7 +215,6 @@ class CreateCardCommand extends AbstractCommand
         $em->persist($card);
         $em->flush();
 
-        return $this->success($output, "Voila... You have created a new card.");
+        return $this->success($output, 'Voila... You have created a new card.');
     }
-
 }

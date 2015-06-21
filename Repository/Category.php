@@ -20,5 +20,4 @@ use Doctrine\ORM\EntityRepository;
  */
 class Category extends EntityRepository
 {
-
 }

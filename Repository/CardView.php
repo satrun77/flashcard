@@ -12,7 +12,7 @@
 namespace Moo\FlashCardBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use \Moo\FlashCardBundle\Entity;
+use Moo\FlashCardBundle\Entity;
 
 /**
  * CardView is a repository class for the card view entity.
@@ -21,13 +21,13 @@ use \Moo\FlashCardBundle\Entity;
  */
 class CardView extends EntityRepository
 {
-
     /**
      * Insert a view count
      *
-     * @param  \Moo\FlashCardBundle\Entity\Card             $card
-     * @param  string                                       $ip
-     * @return boolean|\Moo\FlashCardBundle\Entity\CardView
+     * @param Entity\Card $card
+     * @param string      $ip
+     *
+     * @return bool|Entity\CardView
      */
     public function insertView(Entity\Card $card, $ip)
     {
@@ -36,11 +36,11 @@ class CardView extends EntityRepository
             return $view;
         }
 
-        $isExists = $this->findOneBy(array('card' => $card, 'ip'   => ip2long($ip)));
+        $isExists = $this->findOneBy(['card' => $card, 'ip' => ip2long($ip)]);
         if (!$isExists) {
-            $view = new Entity\CardView;
+            $view = new Entity\CardView();
             $view->setCard($card);
-            $view->setTimestamp(new \DateTime);
+            $view->setTimestamp(new \DateTime());
             $view->setIp($ip);
             $em = $this->getEntityManager();
             $em->persist($view);
@@ -49,5 +49,4 @@ class CardView extends EntityRepository
 
         return $view;
     }
-
 }

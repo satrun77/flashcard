@@ -23,7 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
 class CardView
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -39,14 +39,14 @@ class CardView
     private $timestamp;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="ip", type="integer", nullable=false)
      */
     private $ip;
 
     /**
-     * @var \Moo\FlashCardBundle\Entity\Card
+     * @var Card
      *
      * @ORM\OneToOne(targetEntity="Card", inversedBy="cardViews")
      * @ORM\JoinColumns({
@@ -58,7 +58,7 @@ class CardView
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -68,7 +68,8 @@ class CardView
     /**
      * Set timestamp
      *
-     * @param  \DateTime $timestamp
+     * @param \DateTime $timestamp
+     *
      * @return CardView
      */
     public function setTimestamp($timestamp)
@@ -91,7 +92,8 @@ class CardView
     /**
      * Set ip
      *
-     * @param  integer  $ip
+     * @param int $ip
+     *
      * @return CardView
      */
     public function setIp($ip)
@@ -104,7 +106,7 @@ class CardView
     /**
      * Get ip
      *
-     * @return integer
+     * @return int
      */
     public function getIp()
     {
@@ -114,10 +116,11 @@ class CardView
     /**
      * Set card
      *
-     * @param  \Moo\FlashCardBundle\Entity\Card $card
+     * @param Card $card
+     *
      * @return CardView
      */
-    public function setCard(\Moo\FlashCardBundle\Entity\Card $card = null)
+    public function setCard(Card $card = null)
     {
         $this->card = $card;
 
@@ -127,11 +130,10 @@ class CardView
     /**
      * Get card
      *
-     * @return \Moo\FlashCardBundle\Entity\Card
+     * @return Card
      */
     public function getCard()
     {
         return $this->card;
     }
-
 }

@@ -22,5 +22,4 @@ class RestResponse
     public $errorMessage = '';
     public $content = '';
     public $extra;
-
 }

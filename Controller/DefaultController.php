@@ -21,10 +21,10 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
  */
 class DefaultController extends Controller
 {
-
     /**
      * <p>Shows preview of the first n cards, with the options to load more cards (the next n cards).</p>
-     * <p>Each card is displayed as a thumbnail. Clicking the thumbnail, will expand the card to show all of it details.</p>
+     * <p>Each card is displayed as a thumbnail. Clicking the thumbnail, will expand the card to show all of it
+     * details.</p>
      * <p>There is also, a search text field at the top right side to search the cards.</p>
      *
      * @ApiDoc(
@@ -34,7 +34,6 @@ class DefaultController extends Controller
      * )
      *
      * @return \Symfony\Component\HttpFoundation\Response A Response instance
-     * @throws type
      */
     public function indexAction()
     {
@@ -42,10 +41,10 @@ class DefaultController extends Controller
         $cardService = $this->get('moo_flashcard.card.repository');
         $cards = $cardService->fetchCards(1, $limit);
 
-        return $this->render('MooFlashCardBundle:Default:index.html.twig', array(
-                    'cards' => $cards,
-                    'limit' => $limit
-        ));
+        return $this->render('MooFlashCardBundle:Default:index.html.twig', [
+            'cards' => $cards,
+            'limit' => $limit,
+        ]);
     }
 
     /**
@@ -61,9 +60,9 @@ class DefaultController extends Controller
      *   }
      * )
      *
-     * @param  string                                     $slug The slug value of a card.
+     * @param string $slug The slug value of a card.
+     *
      * @return \Symfony\Component\HttpFoundation\Response A Response instance
-     * @throws type
      */
     public function viewAction($slug)
     {
@@ -74,17 +73,18 @@ class DefaultController extends Controller
         }
         $this->updateViews($card, $cardService);
 
-        return $this->render('MooFlashCardBundle:Default:view.html.twig', array(
-                    'card'  => $card,
-                    'popup' => null
-        ));
+        return $this->render('MooFlashCardBundle:Default:view.html.twig', [
+            'card'  => $card,
+            'popup' => null,
+        ]);
     }
 
     /**
      * Update flashcard view counter
      *
-     * @param  \Moo\FlashCardBundle\Entity\Card     $card
-     * @param  \Moo\FlashCardBundle\Repository\Card $cardService
+     * @param \Moo\FlashCardBundle\Entity\Card     $card
+     * @param \Moo\FlashCardBundle\Repository\Card $cardService
+     *
      * @return \Moo\FlashCardBundle\Entity\Card
      */
     protected function updateViews($card, $cardService)
@@ -99,5 +99,4 @@ class DefaultController extends Controller
 
         return $card;
     }
-
 }

@@ -22,16 +22,15 @@ use Symfony\Bundle\FrameworkBundle\Templating\TemplateReference;
  */
 class ExceptionController extends BaseExceptionController
 {
-
     /**
      * Override to provide a custom 404 error page for the current bundle
      *
      * @param Request $request
      * @param string  $format
-     * @param integer $code    An HTTP response status code
+     * @param int     $code    An HTTP response status code
      * @param Boolean $debug
      *
-     * @return \Symfony\Bundle\FrameworkBundle\Templating\TemplateReference
+     * @return TemplateReference
      */
     protected function findTemplate(Request $request, $format, $code, $debug)
     {
@@ -45,5 +44,4 @@ class ExceptionController extends BaseExceptionController
 
         return parent::findTemplate($request, $format, $code, $debug);
     }
-
 }

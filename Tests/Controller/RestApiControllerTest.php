@@ -26,9 +26,9 @@ class RestApiControllerTest extends AbstractWebTestCase
     {
         parent::setUp();
 
-        $this->loadFixtures(array(
+        $this->loadFixtures([
             'Moo\FlashCardBundle\DataFixtures\ORM\LoadCategoryCards',
-        ));
+        ]);
 
         $this->baseUrl = $this->getUrl('moo_flashcard_index') . 'api/';
     }
@@ -159,5 +159,4 @@ class RestApiControllerTest extends AbstractWebTestCase
         $this->assertTrue($response->isNotFound());
         $this->assertEquals($this->getContentType($type), $response->headers->get('Content-Type'));
     }
-
 }

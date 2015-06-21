@@ -21,12 +21,11 @@ use Moo\FlashCardBundle\Tests\AbstractWebTestCase;
  */
 class CardTest extends AbstractWebTestCase
 {
-
     public function testGetTitle()
     {
-        $title = "Title";
+        $title = 'Title';
         $content = 'Content';
-        $card = new Card;
+        $card = new Card();
         $card->setTitle($title);
         $card->setContent($content);
         $card->setActive(true);
@@ -38,7 +37,7 @@ class CardTest extends AbstractWebTestCase
 
     public function testIsActive()
     {
-        $card = new Card;
+        $card = new Card();
         $card->setActive(true);
 
         $this->assertTrue($card->isActive());
@@ -46,9 +45,9 @@ class CardTest extends AbstractWebTestCase
 
     public function testMakingSlug()
     {
-        $this->loadFixtures(array(
+        $this->loadFixtures([
             'Moo\FlashCardBundle\DataFixtures\ORM\LoadCreateCard',
-        ));
+        ]);
 
         $cardService = $this->get('moo_flashcard.card.repository');
         $card = $cardService->findOneBySlugJoinedToCategory('card-1');
@@ -59,5 +58,4 @@ class CardTest extends AbstractWebTestCase
         $this->assertInstanceOf('\DateTime', $card->getUpdated());
         $this->assertInstanceOf('\Moo\FlashCardBundle\Entity\Category', $card->getCategory());
     }
-
 }

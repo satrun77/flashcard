@@ -32,7 +32,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class Card
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -49,7 +49,7 @@ class Card
     private $slug;
 
     /**
-     * @var boolean
+     * @var bool
      *
      * @ORM\Column(name="active", type="boolean", nullable=false)
      */
@@ -106,14 +106,14 @@ class Card
     private $metaDescription;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="views", type="integer", nullable=false)
      */
-    private $views = "0";
+    private $views = '0';
 
     /**
-     * @var \Moo\FlashCardBundle\Entity\Category
+     * @var Category
      *
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="cards")
      * @ORM\JoinColumns({
@@ -136,7 +136,7 @@ class Card
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -146,7 +146,8 @@ class Card
     /**
      * Set slug
      *
-     * @param  string $slug
+     * @param string $slug
+     *
      * @return Card
      */
     public function setSlug($slug)
@@ -169,7 +170,8 @@ class Card
     /**
      * Set isActive
      *
-     * @param  boolean $isActive
+     * @param bool $isActive
+     *
      * @return Card
      */
     public function setActive($isActive)
@@ -182,7 +184,7 @@ class Card
     /**
      * Get isActive
      *
-     * @return boolean
+     * @return bool
      */
     public function isActive()
     {
@@ -192,7 +194,8 @@ class Card
     /**
      * Set title
      *
-     * @param  string $title
+     * @param string $title
+     *
      * @return Card
      */
     public function setTitle($title)
@@ -215,7 +218,8 @@ class Card
     /**
      * Set content
      *
-     * @param  string $content
+     * @param string $content
+     *
      * @return Card
      */
     public function setContent($content)
@@ -238,7 +242,8 @@ class Card
     /**
      * Set created
      *
-     * @param  \DateTime $created
+     * @param \DateTime $created
+     *
      * @return Card
      */
     public function setCreated($created = null)
@@ -265,7 +270,8 @@ class Card
     /**
      * Set updated
      *
-     * @param  \DateTime $updated
+     * @param \DateTime $updated
+     *
      * @return Card
      */
     public function setUpdated($updated = null)
@@ -291,7 +297,8 @@ class Card
     /**
      * Set meta keywords
      *
-     * @param  string $keywords
+     * @param string $keywords
+     *
      * @return Card
      */
     public function setMetaKeywords($keywords)
@@ -314,7 +321,8 @@ class Card
     /**
      * Set meta description
      *
-     * @param  string $metadata
+     * @param string $description
+     *
      * @return Card
      */
     public function setMetaDescription($description)
@@ -337,7 +345,8 @@ class Card
     /**
      * Set views
      *
-     * @param  integer $views
+     * @param int $views
+     *
      * @return Card
      */
     public function setViews($views)
@@ -350,7 +359,7 @@ class Card
     /**
      * Get views
      *
-     * @return integer
+     * @return int
      */
     public function getViews()
     {
@@ -360,10 +369,11 @@ class Card
     /**
      * Set category
      *
-     * @param  \Moo\FlashCardBundle\Entity\Category $category
+     * @param Category $category
+     *
      * @return Card
      */
-    public function setCategory(\Moo\FlashCardBundle\Entity\Category $category = null)
+    public function setCategory(Category $category = null)
     {
         $this->category = $category;
 
@@ -373,7 +383,7 @@ class Card
     /**
      * Get category
      *
-     * @return \Moo\FlashCardBundle\Entity\Category
+     * @return Category
      */
     public function getCategory()
     {
@@ -398,7 +408,6 @@ class Card
 
     public function __toString()
     {
-        return $this->getTitle() ? : 'New Card';
+        return $this->getTitle() ?: 'New Card';
     }
-
 }

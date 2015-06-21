@@ -12,7 +12,8 @@
 namespace Moo\FlashCardBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use \Moo\FlashCardBundle\Entity;
+use Doctrine\ORM\NoResultException;
+use Moo\FlashCardBundle\Entity;
 use Knp\Bundle\PaginatorBundle\Definition\PaginatorAwareInterface;
 use Knp\Component\Pager\Paginator;
 
@@ -31,8 +32,9 @@ class Card extends EntityRepository implements PaginatorAwareInterface
     /**
      * Set the KnpPaginator instance.
      *
-     * @param  Paginator      $paginator
-     * @return PaginatorAware
+     * @param Paginator $paginator
+     *
+     * @return $this
      */
     public function setPaginator(Paginator $paginator)
     {
@@ -54,7 +56,7 @@ class Card extends EntityRepository implements PaginatorAwareInterface
     /**
      * Return query to select all active cards
      *
-     * @return type
+     * @return \Doctrine\ORM\QueryBuilder
      */
     public function getQueryAllCards()
     {
@@ -71,8 +73,9 @@ class Card extends EntityRepository implements PaginatorAwareInterface
     /**
      * Return query to search for active cards
      *
-     * @param  string $search
-     * @return type
+     * @param string $search
+     *
+     * @return \Doctrine\ORM\QueryBuilder
      */
     public function getQuerySearchCards($search)
     {
@@ -93,9 +96,10 @@ class Card extends EntityRepository implements PaginatorAwareInterface
     /**
      * Return all cards
      *
-     * @param  int  $page
-     * @param  int  $limit
-     * @return type
+     * @param int $page
+     * @param int $limit
+     *
+     * @return \Knp\Component\Pager\Pagination\PaginationInterface
      */
     public function fetchCards($page = 1, $limit = 20)
     {
@@ -105,8 +109,9 @@ class Card extends EntityRepository implements PaginatorAwareInterface
     /**
      * Search for cards by keyword
      *
-     * @param  string $search
-     * @return type
+     * @param string $search
+     *
+     * @return \Knp\Component\Pager\Pagination\PaginationInterface
      */
     public function search($search, $page = 1, $limit = 20)
     {
@@ -116,29 +121,31 @@ class Card extends EntityRepository implements PaginatorAwareInterface
     /**
      * Search for a card by keyword
      *
-     * @param  string                                $search
+     * @param string $search
+     *
      * @return null|\Moo\FlashCardBundle\Entity\Card
      */
     public function searchForOne($search)
     {
         if (empty($search)) {
-            return null;
+            return;
         }
 
         try {
             return $this->getQuerySearchCards($search)
-                            ->setMaxResults(1)
-                            ->getQuery()
-                            ->getSingleResult();
-        } catch (\Doctrine\ORM\NoResultException $e) {
-            return null;
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getSingleResult();
+        } catch (NoResultException $e) {
+            return;
         }
     }
 
     /**
      * Search for a card by a slug
      *
-     * @param  string                                $slug
+     * @param string $slug
+     *
      * @return null|\Moo\FlashCardBundle\Entity\Card
      */
     public function findOneBySlugJoinedToCategory($slug)
@@ -152,16 +159,17 @@ class Card extends EntityRepository implements PaginatorAwareInterface
 
         try {
             return $query->getQuery()->getSingleResult();
-        } catch (\Doctrine\ORM\NoResultException $e) {
-            return null;
+        } catch (NoResultException $e) {
+            return;
         }
     }
 
     /**
      * Return random cards
      *
-     * @param  int  $limit
-     * @return type
+     * @param int $limit
+     *
+     * @return array
      */
     public function fetchRadomCards($limit = 30)
     {
@@ -169,7 +177,7 @@ class Card extends EntityRepository implements PaginatorAwareInterface
 
         // retrieve the highest card id
         $max = $em->createQuery('SELECT MAX(c.id) FROM MooFlashCardBundle:Card c')
-                ->getSingleScalarResult();
+            ->getSingleScalarResult();
 
         // get random cards
         $query = $this->getEntityManager()->createQueryBuilder();
@@ -199,5 +207,4 @@ class Card extends EntityRepository implements PaginatorAwareInterface
         $em = $this->getEntityManager();
         $em->flush();
     }
-
 }

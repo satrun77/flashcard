@@ -22,23 +22,31 @@ use Moo\FlashCardBundle\Entity;
  */
 abstract class AbstractFixture extends DectrineAbstractFixture implements OrderedFixtureInterface
 {
-
     /**
      * Helper method to create a card.
      *
-     * @param  string                               $title
-     * @param  \Moo\FlashCardBundle\Entity\Category $category
-     * @param  string                               $content
-     * @param  string                               $keywords
-     * @param  string                               $description
-     * @param  string                               $slug
-     * @param  boolean                              $isActive
-     * @param  int                                  $views
+     * @param string                               $title
+     * @param \Moo\FlashCardBundle\Entity\Category $category
+     * @param string                               $content
+     * @param string                               $keywords
+     * @param string                               $description
+     * @param string                               $slug
+     * @param bool                                 $isActive
+     * @param int                                  $views
+     *
      * @return \Moo\FlashCardBundle\Entity\Card
      */
-    protected function createCard($title, $category, $content, $keywords, $description, $slug = null, $isActive = true, $views = 0)
-    {
-        $card = new Entity\Card;
+    protected function createCard(
+        $title,
+        $category,
+        $content,
+        $keywords,
+        $description,
+        $slug = null,
+        $isActive = true,
+        $views = 0
+    ) {
+        $card = new Entity\Card();
         $card->setCreated();
         $card->setTitle($title);
         $card->setCategory($category);
@@ -57,15 +65,16 @@ abstract class AbstractFixture extends DectrineAbstractFixture implements Ordere
     /**
      * Helper method to create a category.
      *
-     * @param  string                               $title
-     * @param  string                               $description
-     * @param  \Moo\FlashCardBundle\Entity\Category $parent
-     * @param  int                                  $isActive
-     * @return \Moo\FlashCardBundle\Entity\Category
+     * @param string $title
+     * @param string $description
+     * @param null   $parent
+     * @param bool   $isActive
+     *
+     * @return Entity\Category
      */
     protected function createCategory($title, $description, $parent = null, $isActive = true)
     {
-        $category = new Entity\Category;
+        $category = new Entity\Category();
         $category->setCreated();
         $category->setDescription($description);
         $category->setActive($isActive);
@@ -79,5 +88,4 @@ abstract class AbstractFixture extends DectrineAbstractFixture implements Ordere
     {
         return 1; // the order in which fixtures will be loaded
     }
-
 }

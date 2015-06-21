@@ -2,10 +2,10 @@
 
 // if the bundle is within a symfony project, try to reuse the project's autoload
 
-$files = array(
+$files = [
     __DIR__ . '/../../vendor/autoload.php',
     __DIR__ . '/../../../../../app/autoload.php',
-);
+];
 
 $autoload = false;
 foreach ($files as $file) {
@@ -27,7 +27,7 @@ Visit http://getcomposer.org/ for more information.
 }
 
 if (class_exists('Doctrine\Common\Annotations\AnnotationRegistry')) {
-    \Doctrine\Common\Annotations\AnnotationRegistry::registerLoader(array($autoload, 'loadClass'));
+    \Doctrine\Common\Annotations\AnnotationRegistry::registerLoader([$autoload, 'loadClass']);
 }
 
 // force loading the ApiDoc annotation since the composer target-dir autoloader does not run through $loader::loadClass

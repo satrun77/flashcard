@@ -19,7 +19,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * Category is the entity class that represents a record from the database.
  *
-* @author Mohamed Alsharaf <mohamed.alsharaf@gmail.com>
+ * @author Mohamed Alsharaf <mohamed.alsharaf@gmail.com>
  * @ORM\Table(name="card_category")
  * @ORM\Entity(repositoryClass="Moo\FlashCardBundle\Repository\Category")
  * @ORM\HasLifecycleCallbacks()
@@ -31,7 +31,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 class Category
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -75,14 +75,14 @@ class Category
     private $updated;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="active", type="boolean", nullable=true)
      */
     private $active = false;
 
     /**
-     * @var \Moo\FlashCardBundle\Entity\Category
+     * @var Category
      *
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
      * @ORM\JoinColumns({
@@ -110,7 +110,7 @@ class Category
     /**
      * Get id
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -120,7 +120,8 @@ class Category
     /**
      * Set title
      *
-     * @param  string   $title
+     * @param string $title
+     *
      * @return Category
      */
     public function setTitle($title)
@@ -143,7 +144,8 @@ class Category
     /**
      * Set description
      *
-     * @param  string   $description
+     * @param string $description
+     *
      * @return Category
      */
     public function setDescription($description)
@@ -166,7 +168,8 @@ class Category
     /**
      * Set created
      *
-     * @param  \DateTime $created
+     * @param \DateTime $created
+     *
      * @return Category
      */
     public function setCreated($created = null)
@@ -193,7 +196,8 @@ class Category
     /**
      * Set updated
      *
-     * @param  \DateTime $updated
+     * @param \DateTime $updated
+     *
      * @return Category
      */
     public function setUpdated($updated = null)
@@ -219,7 +223,8 @@ class Category
     /**
      * Set isActive
      *
-     * @param  integer  $isActive
+     * @param int $isActive
+     *
      * @return Category
      */
     public function setActive($isActive)
@@ -232,7 +237,7 @@ class Category
     /**
      * Get isActive
      *
-     * @return integer
+     * @return int
      */
     public function isActive()
     {
@@ -242,10 +247,11 @@ class Category
     /**
      * Set parent
      *
-     * @param  \Moo\FlashCardBundle\Entity\Category $parent
+     * @param Category $parent
+     *
      * @return Category
      */
-    public function setParent(\Moo\FlashCardBundle\Entity\Category $parent = null)
+    public function setParent(Category $parent = null)
     {
         $this->parent = $parent;
 
@@ -255,7 +261,7 @@ class Category
     /**
      * Get parent
      *
-     * @return \Moo\FlashCardBundle\Entity\Category
+     * @return Category
      */
     public function getParent()
     {
@@ -280,7 +286,6 @@ class Category
 
     public function __toString()
     {
-        return $this->getTitle() ? : 'New Category';
+        return $this->getTitle() ?: 'New Category';
     }
-
 }

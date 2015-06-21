@@ -39,7 +39,7 @@ class CreateCategoryCommand extends AbstractCommand
     protected function getEntity()
     {
         if (null === $this->entity) {
-            $this->entity = new Entity\Category;
+            $this->entity = new Entity\Category();
         }
 
         return $this->entity;
@@ -54,30 +54,31 @@ class CreateCategoryCommand extends AbstractCommand
     protected function configure()
     {
         $this
-                ->setName('flashcard:category:create')
-                ->setDescription('Create a category')
-                ->addArgument('title', InputArgument::REQUIRED, 'The category title.')
-                ->addArgument('desc', InputArgument::OPTIONAL, 'The category description.')
-                ->addArgument('parent', InputArgument::OPTIONAL, 'The parent category ID.')
-                ->addOption('active', null, InputOption::VALUE_NONE, 'If set, the category is going to be active.')
-        ;
+            ->setName('flashcard:category:create')
+            ->setDescription('Create a category')
+            ->addArgument('title', InputArgument::REQUIRED, 'The category title.')
+            ->addArgument('desc', InputArgument::OPTIONAL, 'The category description.')
+            ->addArgument('parent', InputArgument::OPTIONAL, 'The parent category ID.')
+            ->addOption('active', null, InputOption::VALUE_NONE, 'If set, the category is going to be active.');
     }
 
     /**
      * Enable interaction
      *
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param InputInterface  $input
+     * @param OutputInterface $output
      */
     protected function interact(InputInterface $input, OutputInterface $output)
     {
         if (!$input->getArgument('title')) {
-            $value = $this->getHelper('dialog')->askAndValidate($output, 'Please enter (Title): ', array($this, 'validateTitle'), 1);
+            $value = $this->getHelper('dialog')->askAndValidate($output, 'Please enter (Title): ',
+                [$this, 'validateTitle'], 1);
             $input->setArgument('title', $value);
         }
 
         if (!$input->getArgument('parent')) {
-            $value = $this->getHelper('dialog')->askAndValidate($output, 'Please enter (Parent category ID): ', array($this, 'validateParent'), 1);
+            $value = $this->getHelper('dialog')->askAndValidate($output, 'Please enter (Parent category ID): ',
+                [$this, 'validateParent'], 1);
             $input->setArgument('parent', $value);
         }
     }
@@ -85,8 +86,10 @@ class CreateCategoryCommand extends AbstractCommand
     /**
      * Validate the category title
      *
-     * @param  string     $value
+     * @param string $value
+     *
      * @return string
+     *
      * @throws \Exception
      */
     public function validateTitle($value)
@@ -108,8 +111,10 @@ class CreateCategoryCommand extends AbstractCommand
     /**
      * Validate the category parent
      *
-     * @param  string          $value
+     * @param string $value
+     *
      * @return Entity\Category
+     *
      * @throws \Exception
      */
     public function validateParent($value)
@@ -131,9 +136,10 @@ class CreateCategoryCommand extends AbstractCommand
     /**
      * Execute the command line to create a new category.
      *
-     * @param  \Symfony\Component\Console\Input\InputInterface   $input
-     * @param  \Symfony\Component\Console\Output\OutputInterface $output
-     * @return boolean
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     *
+     * @return bool
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -165,7 +171,6 @@ class CreateCategoryCommand extends AbstractCommand
         $em->persist($category);
         $em->flush();
 
-        $this->success($output, "Voila... You have created a new category.");
+        $this->success($output, 'Voila... You have created a new category.');
     }
-
 }
