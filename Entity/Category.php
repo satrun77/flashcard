@@ -84,7 +84,7 @@ class Category
     /**
      * @var Category
      *
-     * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="children", fetch="EAGER")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="parent", referencedColumnName="id")
      * })
@@ -92,12 +92,12 @@ class Category
     private $parent;
 
     /**
-     * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
+     * @ORM\OneToMany(targetEntity="Category", mappedBy="parent", fetch="EAGER")
      */
     private $children;
 
     /**
-     * @ORM\OneToMany(targetEntity="Card", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="Card", mappedBy="category", fetch="EAGER")
      */
     private $cards;
 
