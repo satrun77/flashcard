@@ -33,7 +33,7 @@
     <div id="fc-cards">
     {{ include('MooFlashCardBundle:Card:list.html.twig', { 'cards': cards }) }}
     </div>
-    {% if cards.getTotalItemCount() > cards.count() %}
+    {% if cards and cards.getTotalItemCount() > cards.count() %}
         <button type="button" class="btn btn-default btn-lg btn-block" id="fc-loadmore">{% trans %}Load more...{% endtrans %}</button>
     {% endif %}
 {% endblock %}
