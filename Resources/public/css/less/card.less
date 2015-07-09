@@ -1,0 +1,106 @@
+@import (reference) "base";
+
+.fc-card {
+
+  .share {
+    float: right;
+    height: 19px;
+    margin-right: -7px;
+
+    .share-btn {
+      float: left;
+      margin: 0 3px 0;
+    }
+
+    .close {
+      float: right;
+      margin: -2px 0 0 10px;
+    }
+  }
+
+  .panel-title {
+    float: left;
+  }
+
+  .panel-heading {
+    overflow: hidden;
+  }
+
+  .panel-footer {
+    padding: 4px;
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    li {
+      float: left;
+      display: inline;
+      margin: 0;
+      border-right: 1px solid #ddd;
+      font-size: 11px;
+      padding: 0 8px;
+      font-style: italic;
+      color: #777575;
+
+      &.last {
+        border-right: 0 none;
+      }
+    }
+  }
+
+  .panel-info {
+    margin-bottom: 0;
+  }
+
+  .text-cap {
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  .example-heading {
+    border-left: 5px solid #eeeeee;
+    padding-left: 10px;
+    padding-top: 10px;
+  }
+}
+
+.fc-card.popup {
+  z-index: 9999;
+  left: 50%;
+  margin: 10px;
+  min-width: 500px;
+  max-width: 600px;
+  float: left;
+
+  @media @tablet767x {
+    width: 360px;
+    min-width: 360px;
+  }
+}
+
+.fc-waiting {
+  display: none;
+  z-index: 99999;
+  background: #FDFCE7;
+  width: 200px;
+  text-align: center;
+  padding: 3px;
+  color: #3F3F3F;
+  margin: 0 auto;
+}
+
+.fc-waiting-top {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  margin-left: -100px;
+
+  .progress {
+    margin-bottom: 0;
+  }
+}

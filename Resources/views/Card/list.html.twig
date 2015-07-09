@@ -1,5 +1,5 @@
 {% for card in cards %}
-<div class="fc-cardwrap col-xxs-1 col-xs-1 col-xs-4 col-sm-3 col-md-2">
+<div class="fc-cardwrap col-xs-12 col-sm-3 col-md-3 col-lg-2">
     <div class="fc-cardwrap-inner">
     {{ include('MooFlashCardBundle:Card:details.html.twig', { 'card': card, 'page_link': true, popup: false, share_link: false }) }}
     </div>
