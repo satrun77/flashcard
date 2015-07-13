@@ -12,6 +12,8 @@
 namespace Moo\FlashCardBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
+use Moo\FlashCardBundle\Entity;
+use Doctrine\ORM\Query\Expr;
 
 /**
  * Category is a repository class for the card category entity.
@@ -20,4 +22,22 @@ use Doctrine\ORM\EntityRepository;
  */
 class Category extends EntityRepository
 {
+    /**
+     * Fetch active categories
+     *
+     * @return array
+     */
+    public function fetchCategories()
+    {
+        $builder = $this->getEntityManager()->createQueryBuilder();
+
+        $builder
+            ->select('p', 'c')
+            ->from('MooFlashCardBundle:Category', 'p')
+            ->join('p.cards', 'c', Expr\Join::WITH, 'c.active = 1')
+            ->where('p.active = 1')
+            ->orderBy('p.title', 'ASC');
+
+        return $builder->getQuery()->getResult();
+    }
 }

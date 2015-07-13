@@ -269,6 +269,14 @@ class Category
     }
 
     /**
+     * @return ArrayCollection
+     */
+    public function getCards()
+    {
+        return $this->cards;
+    }
+
+    /**
      * @ORM\PrePersist()
      */
     public function prePersist()

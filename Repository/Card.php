@@ -94,28 +94,70 @@ class Card extends EntityRepository implements PaginatorAwareInterface
     }
 
     /**
-     * Return all cards
+     * Return query to search cards by a specific criteria.
+     * - Cards by category
+     * - Cards by keyword
+     * - All cards
+     *
+     * @param array $criteria
+     *
+     * @return \Knp\Component\Pager\Pagination\PaginationInterface
+     */
+    public function getQueryBy(array $criteria)
+    {
+        $query = '';
+        $category = 0;
+        extract($criteria);
+
+        // Search query or all cards
+        if ($query !== '') {
+            $cards = $this->getQuerySearchCards($query);
+        } else {
+            $cards = $this->getQueryAllCards();
+        }
+
+        // Filter query by category ID
+        if ($category > 0) {
+            $cards = $cards
+                ->where('c.id = :category')
+                ->setParameter('category', $category);
+        }
+
+        return $cards;
+    }
+
+    /**
+     * Return paginated cards by a specific criteria.
+     * - Cards by category
+     * - Cards by keyword
+     * - All cards
+     *
+     * @param array $criteria
+     * @param int   $page
+     * @param int   $limit
+     *
+     * @throws \LogicException
+     *
+     * @return \Knp\Component\Pager\Pagination\PaginationInterface
+     */
+    public function fetchCardsBy(array $criteria, $page = 1, $limit = 20)
+    {
+        return $this->getPaginator()->paginate($this->getQueryBy($criteria), $page, $limit);
+    }
+
+    /**
+     * Return all cards paginated
      *
      * @param int $page
      * @param int $limit
+     *
+     * @throws \LogicException
      *
      * @return \Knp\Component\Pager\Pagination\PaginationInterface
      */
     public function fetchCards($page = 1, $limit = 20)
     {
-        return $this->getPaginator()->paginate($this->getQueryAllCards(), $page, $limit);
-    }
-
-    /**
-     * Search for cards by keyword
-     *
-     * @param string $search
-     *
-     * @return \Knp\Component\Pager\Pagination\PaginationInterface
-     */
-    public function search($search, $page = 1, $limit = 20)
-    {
-        return $this->getPaginator()->paginate($this->getQuerySearchCards($search), $page, $limit);
+        return $this->fetchCardsBy([], $page, $limit);
     }
 
     /**
@@ -128,7 +170,7 @@ class Card extends EntityRepository implements PaginatorAwareInterface
     public function searchForOne($search)
     {
         if (empty($search)) {
-            return;
+            return null;
         }
 
         try {
@@ -137,7 +179,7 @@ class Card extends EntityRepository implements PaginatorAwareInterface
                 ->getQuery()
                 ->getSingleResult();
         } catch (NoResultException $e) {
-            return;
+            return null;
         }
     }
 
@@ -160,7 +202,7 @@ class Card extends EntityRepository implements PaginatorAwareInterface
         try {
             return $query->getQuery()->getSingleResult();
         } catch (NoResultException $e) {
-            return;
+            return null;
         }
     }
 

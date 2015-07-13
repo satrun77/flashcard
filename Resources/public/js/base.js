@@ -1,6 +1,6 @@
 var moofc = {
     init: function(core, override) {
-        return $.extend(core, override).init();
+        return $.extend(true, core, override).init();
     },
     waitingMessage: {
         waiting: null,
@@ -38,3 +38,17 @@ var moofc = {
         return alert(message);
     }
 };
+
+/**
+ * $.parseParams - parse query string parameters into an object.
+ */
+(function($) {
+    $.parseParams = function(query) {
+        var re = /[\\?&](.*?)=([^&#]*)/g;
+        var m, r = {};
+        while ((m = re.exec(query)) !== null) {
+            r[m[1]] = m[2];
+        }
+        return r;
+    };
+})(jQuery);

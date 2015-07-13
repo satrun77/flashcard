@@ -13,9 +13,9 @@ namespace Moo\FlashCardBundle\Controller;
 
 use FOS\RestBundle;
 use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Controller\Annotations\QueryParam;
 use Moo\FlashCardBundle\Response\RestResponse;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * RestApiController is the default REST API controller.
@@ -33,37 +33,41 @@ class RestApiController extends FOSRestController
      *   statusCodes={
      *      200="Returned when successful",
      *      404="Returned when the cards are not found"
+     *   },
+     *   filters={
+     *      {"name"="limit",    "dataType"="integer", "required"=false, "description"="Max number of cards to return."},
+     *      {"name"="page",     "dataType"="integer", "required"=false, "description"="Page number."},
+     *      {"name"="query",    "dataType"="string",  "required"=false, "description"="Limit result by query."},
+     *      {"name"="category", "dataType"="integer", "required"=false, "description"="Limit result by a category ID."}
      *   }
      * )
      *
-     * @QueryParam(name="page", requirements="\d+", default="1", description="Page number.")
-     * @QueryParam(name="limit", requirements="\d+", default="20", description="Max number of cards to return.")
-     * @QueryParam(name="query", requirements="", default="", description="Limit result by query")
-     *
-     * @param int    $page
-     * @param int    $limit
-     * @param string $query
+     * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getCardsAction($page = 1, $limit = 20, $query = '')
+    public function getCardsAction(Request $request)
     {
         $cardService = $this->get('moo_flashcard.card.repository');
 
-        if (!empty($query)) {
-            $data = $cardService->search($query, $page, $limit);
-        } else {
-            $data = $cardService->fetchCards($page, $limit);
-        }
+        $data = $cardService->fetchCardsBy(
+            [
+                'query'    => $request->get('query', ''),
+                'category' => $request->query->getInt('category', 0),
+            ],
+            $request->query->getInt('page', 1),
+            $request->query->getInt('limit', 20)
+        );
         $total = $data->getTotalItemCount();
 
         $response = $this->createResponse($data->getItems(), 'No flash cards found.');
         $response->extra = ['total' => $total];
 
-        $view = $this->view($response, $response->code)
+        $view = $this
+            ->view($response, $response->code)
             ->setTemplate('MooFlashCardBundle:Card:list.html.twig');
 
-        if ('html' === $this->getRequestFormat($view)) {
+        if ('html' === $this->getRequestFormat($view, $request)) {
             $view->setData([
                 'cards' => $response->content,
             ]);
@@ -72,7 +76,7 @@ class RestApiController extends FOSRestController
         $return = $this->handleView($view);
 
         // for html request, return the error message
-        if (!$total && 'html' === $this->getRequestFormat($view)) {
+        if (!$total && 'html' === $this->getRequestFormat($view, $request)) {
             return $return->setContent($response->errorMessage);
         }
 
@@ -88,37 +92,37 @@ class RestApiController extends FOSRestController
      *   statusCodes={
      *      200="Returned when successful",
      *      404="Returned when the card is not found"
+     *   },
+     *   filters={
+     *      {"name"="query",     "dataType"="string",  "required"=false, "description"="Search query"},
+     *      {"name"="pageLink",  "dataType"="boolean", "required"=false, "description"="To indicate whether to include a link to the card page (html format only)."},
+     *      {"name"="shareLink", "dataType"="boolean", "required"=false, "description"="To indicate whether to include the share buttons (twitter & google+) (html format only)."},
+     *      {"name"="popup",     "dataType"="boolean", "required"=false, "description"="To indicate whether to the html is to be displayed as a popup box. This will include 'popup class name and close button' (html format only)."}
      *   }
      * )
      *
-     * @QueryParam(name="query", requirements="", default="", description="Search query")
-     * @QueryParam(name="pageLink", requirements="boolean", default=1, description="To indicate whether to include a
-     *                              link to the card page (html format only).")
-     * @QueryParam(name="shareLink", requirements="boolean", default=1, description="To indicate whether to include the
-     *                               share buttons (twitter & google+) (html format only).")
-     * @QueryParam(name="popup", requirements="boolean", default=1, description="To indicate whether to the html is to
-     *                           be displayed as a popup box. This will include 'popup class name and close button'
-     *                           (html format only).")
-     *
-     * @param string $query
-     * @param bool   $pageLink
-     * @param bool   $shareLink
-     * @param bool   $popup
+     * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getCardAction($query = '', $pageLink = true, $shareLink = true, $popup = true)
+    public function getCardAction(Request $request)
     {
+        $query = $request->get('query', '');
+        $pageLink = $request->query->getBoolean('pageLink', true);
+        $shareLink = $request->query->getBoolean('shareLink', true);
+        $popup = $request->query->getBoolean('popup', true);
+
         $cardService = $this->get('moo_flashcard.card.repository');
         $data = $cardService->searchForOne($query);
 
         $response = $this->createResponse($data, 'The flash card you are looking for does not exist.');
 
-        $view = $this->view($response, $response->code)
+        $view = $this
+            ->view($response, $response->code)
             ->setTemplate('MooFlashCardBundle:Card:details.html.twig');
 
         // FOSRestBundle, see https://github.com/FriendsOfSymfony/FOSRestBundle/issues/299
-        if ('html' === $this->getRequestFormat($view)) {
+        if ('html' === $this->getRequestFormat($view, $request)) {
             $view->setData([
                 'card'       => $data,
                 'page_link'  => (boolean) $pageLink,
@@ -130,7 +134,7 @@ class RestApiController extends FOSRestController
         $return = $this->handleView($view);
 
         // for html request, return the error message
-        if (!$data && 'html' === $this->getRequestFormat($view)) {
+        if (!$data && 'html' === $this->getRequestFormat($view, $request)) {
             return $return->setContent($response->errorMessage);
         }
 
@@ -146,27 +150,30 @@ class RestApiController extends FOSRestController
      *   statusCodes={
      *      200="Returned when successful",
      *      404="Returned when the cards are not found"
+     *   },
+     *   filters={
+     *      {"name"="limit",    "dataType"="integer", "required"=false, "description"="Max number of cards to return."}
      *   }
      * )
      *
-     * @QueryParam(name="limit", requirements="\d+", default="30", description="Max number of cards to return.")
-     *
-     * @param int $limit
+     * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getCardsRandomAction($limit = 30)
+    public function getCardsRandomAction(Request $request)
     {
+        $limit = $request->get('limit', 30);
         $cardService = $this->get('moo_flashcard.card.repository');
         $data = $cardService->fetchRadomCards($limit);
 
         $response = $this->createResponse($data, 'No flash cards found.');
 
-        $view = $this->view($response, $response->code)
+        $view = $this
+            ->view($response, $response->code)
             ->setTemplate('MooFlashCardBundle:Card:list.html.twig');
 
         // FOSRestBundle, see https://github.com/FriendsOfSymfony/FOSRestBundle/issues/299
-        if ('html' === $this->getRequestFormat($view)) {
+        if ('html' === $this->getRequestFormat($view, $request)) {
             $view->setData([
                 'cards' => $response->content,
             ]);
@@ -175,7 +182,7 @@ class RestApiController extends FOSRestController
         $return = $this->handleView($view);
 
         // for html request, return the error message
-        if (!$data && 'html' === $this->getRequestFormat($view)) {
+        if (!$data && 'html' === $this->getRequestFormat($view, $request)) {
             return $return->setContent($response->errorMessage);
         }
 
@@ -186,13 +193,12 @@ class RestApiController extends FOSRestController
      * Return request format 'e.g. html, json)
      *
      * @param RestBundle\View\View $view
+     * @param Request              $request
      *
      * @return string
      */
-    protected function getRequestFormat(RestBundle\View\View $view)
+    protected function getRequestFormat(RestBundle\View\View $view, Request $request)
     {
-        $request = $this->getRequest();
-
         return ($view->getFormat() ?: $request->getRequestFormat());
     }
 

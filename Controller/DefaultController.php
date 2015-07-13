@@ -40,10 +40,12 @@ class DefaultController extends Controller
         $limit = 24;
         $cardService = $this->get('moo_flashcard.card.repository');
         $cards = $cardService->fetchCards(1, $limit);
+        $categories = $this->get('moo_flashcard.category.repository')->fetchCategories();
 
         return $this->render('MooFlashCardBundle:Default:index.html.twig', [
-            'cards' => $cards,
-            'limit' => $limit,
+            'cards'      => $cards,
+            'limit'      => $limit,
+            'categories' => $categories,
         ]);
     }
 
