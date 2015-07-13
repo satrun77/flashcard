@@ -4,6 +4,10 @@
 {# No javascript required for this page. #}
 {% endblock %}
 
+{% block page_body_tag %}
+<body class="fc-cardpage">
+{% endblock %}
+
 {% block metas %}
     {{ parent() }}
     {% if card is not null %}
