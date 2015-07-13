@@ -12,7 +12,6 @@
 namespace Moo\FlashCardBundle\Repository;
 
 use Doctrine\ORM\EntityRepository;
-use Moo\FlashCardBundle\Entity;
 use Doctrine\ORM\Query\Expr;
 
 /**
