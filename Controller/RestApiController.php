@@ -108,9 +108,9 @@ class RestApiController extends FOSRestController
     public function getCardAction(Request $request)
     {
         $query = $request->get('query', '');
-        $pageLink = $request->query->getBoolean('pageLink', true);
-        $shareLink = $request->query->getBoolean('shareLink', true);
-        $popup = $request->query->getBoolean('popup', true);
+        $pageLink = (boolean) $request->query->getInt('pageLink', true);
+        $shareLink = (boolean) $request->query->getInt('shareLink', true);
+        $popup = (boolean) $request->query->getInt('popup', true);
 
         $cardService = $this->get('moo_flashcard.card.repository');
         $data = $cardService->searchForOne($query);
