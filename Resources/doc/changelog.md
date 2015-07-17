@@ -25,3 +25,8 @@ Change log
 - New test cases.
 - Code quality changes.
 
+## Version 1.1.0
+- Upgrade bootstrap to 3.3.5 and use LESS.
+- Feature: filter card by category in homepage.
+- Support symfony 2.7.
+- Bug fixes.
