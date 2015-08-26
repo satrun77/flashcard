@@ -14,10 +14,10 @@
         }
     ],
     "require": {
-        "php": ">=5.3.2",
-        "symfony/framework-bundle": "~2.0",
-        "doctrine/orm": ">=2.2.3,<2.4-dev",
-        "doctrine/doctrine-bundle": "1.2.*",
+        "php": ">=5.3.9",
+        "symfony/framework-bundle": "~2.3",
+        "doctrine/doctrine-bundle": "~1.5",
+        "doctrine/orm": "~2.4",
         "stof/doctrine-extensions-bundle": "1.1.*",
         "friendsofsymfony/rest-bundle": "1.1.*",
         "jms/serializer-bundle": "0.12.*",
@@ -33,7 +33,7 @@
         "symfony/assetic-bundle": "2.3.*",
         "liip/functional-test-bundle": "~1.0",
         "doctrine/data-fixtures": "1.0.*",
-        "doctrine/doctrine-fixtures-bundle": "~2.2"
+        "doctrine/doctrine-fixtures-bundle": "~2.2",
     },
     "suggest": {
         "moo/flashcardadmin-bundle": "Provides admin classes that be used with SonataAdminBundle.",
