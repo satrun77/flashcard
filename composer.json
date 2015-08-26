@@ -33,7 +33,7 @@
         "symfony/assetic-bundle": "2.3.*",
         "liip/functional-test-bundle": "~1.0",
         "doctrine/data-fixtures": "1.0.*",
-        "doctrine/doctrine-fixtures-bundle": "~2.2",
+        "doctrine/doctrine-fixtures-bundle": "~2.2"
     },
     "suggest": {
         "moo/flashcardadmin-bundle": "Provides admin classes that be used with SonataAdminBundle.",
