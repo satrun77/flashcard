@@ -19,7 +19,7 @@ matrix:
 before_script:
   - composer self-update
   - composer require symfony/symfony:${SYMFONY_VERSION} --prefer-dist
-  - composer install --dev --prefer-dist
+  - composer install --prefer-dist
 
 script: phpunit --coverage-clover=coverage.clover
 
