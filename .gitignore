@@ -1,7 +1,5 @@
-/nbproject
 /Tests/tests/cache
 /Tests/tests/logs
 /composer.lock
 /composer.phar
 /vendor/
-.idea/
