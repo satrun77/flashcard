@@ -191,7 +191,7 @@ class CreateCardCommand extends AbstractCommand
         $card->setMetaKeywords($input->getArgument('keywords'));
         $card->setMetaDescription($input->getArgument('description'));
         $card->setViews(0);
-        if (!$input->isInteractive()) {
+        if (!$input->isInteractive() || !$card->getCategory()) {
             $card->setCategory(
                 $this->getRepository('category')->find($input->getArgument('category'))
             );
