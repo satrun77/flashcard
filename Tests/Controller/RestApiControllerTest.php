@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Moo\FlashCardBundle package.
+ * This file is part of the Moo\FlashCard package.
  *
  * (c) Mohamed Alsharaf <mohamed.alsharaf@gmail.com>
  *
@@ -9,154 +9,151 @@
  * file that was distributed with this source code.
  */
 
-namespace Moo\FlashCardBundle\Tests\Controller;
+namespace Moo\FlashCard\Tests\Controller;
 
-use Moo\FlashCardBundle\Tests\AbstractWebTestCase;
+use Illuminate\Foundation\Testing\TestResponse;
+use Moo\FlashCard\Entity\Card;
+use Moo\FlashCard\Entity\Category;
+use Moo\FlashCard\Tests\BaseTestCase;
 
 /**
  * RestApiControllerTest contains test cases for the REST API controller.
  *
  * @author Mohamed Alsharaf <mohamed.alsharaf@gmail.com>
  */
-class RestApiControllerTest extends AbstractWebTestCase
+class RestApiControllerTest extends BaseTestCase
 {
-    protected $baseUrl;
-
     public function setUp()
     {
         parent::setUp();
 
-        $this->loadFixtures([
-            'Moo\FlashCardBundle\DataFixtures\ORM\LoadCategoryCards',
+        // Create categories
+        $category1 = $this->category();
+        $category2 = $this->category([
+            'title' => 'Category 2'
+        ]);
+        $category3 = $this->category([
+            'title' => 'Category 3'
+        ]);
+        $this->category([
+            'title' => 'Category 4'
         ]);
 
-        $this->baseUrl = $this->getUrl('moo_flashcard_index') . 'api/';
+        // Create cards
+        for ($i = 1; $i < 5; $i++) {
+            $this->card([
+                'title' => 'Card ' . $i,
+                'category_id' => $category1->id,
+            ]);
+        }
+
+        for ($i = 5; $i < 8; $i++) {
+            $this->card([
+                'title' => 'Card ' . $i,
+                'category_id' => $category2->id,
+            ]);
+        }
+
+        $this->card([
+            'title' => 'Card 9',
+            'category_id' => $category3->id,
+        ]);
     }
 
-    public function testGetAnyCard()
+    public function testViewACardDetails()
     {
-        $client = static::createClient();
+        // Get card by slug
+        $card = Card::where('slug', 'card-1')->first();
 
+        /** @var TestResponse $response */
+        // Request to get all cards
+        $response = $this->getJson('/api/cards');
+
+        // Assert that the above card exists in the response
+        $response->assertStatus(200);
+        $response->assertJsonFragment(['title' => $card->title]);
+        $response->assertJsonFragment(['category_id' => (string )$card->category_id]);
+    }
+
+    public function testGetLimitCard()
+    {
+        // Count of cards to return
         $count = 1;
-        $client->request('GET', $this->baseUrl . 'cards.json?limit=' . $count);
 
-        $data = json_decode($client->getResponse()->getContent());
+        /** @var TestResponse $response */
+        // Request to get limit cards
+        $response = $this->getJson('/api/cards?limit=' . $count);
 
-        $this->assertCount($count, $data->content);
-        $this->assertEquals(200, $data->code);
-        $this->assertSuccessfulResponse($client->getResponse(), 'json');
+        // Assert the response contains same amount of records based on count above
+        $response->assertJsonFragment(['current_page' => 1]);
+        $response->assertJsonCount($count, 'data');
+        $response->assertStatus(200);
     }
 
     public function testSearchValidCards()
     {
-        $client = static::createClient();
+        // Search query
+        $keyword = 'card 1';
 
-        $count = 10;
-        $query = 'card';
-        $client->request('GET', $this->baseUrl . 'cards.json?limit=' . $count . '&query=' . $query);
+        /** @var TestResponse $response */
+        // Request to get cards by a search query and include category details
+        $response = $this->getJson(sprintf('/api/cards?filter[search]=%s&include=category', $keyword));
 
-        $data = json_decode($client->getResponse()->getContent());
-
-        $this->assertGreaterThan(0, count($data->content));
-        $this->assertEquals(200, $data->code);
-        $this->assertSuccessfulResponse($client->getResponse(), 'json');
-    }
-
-    public function testSearchValidCard()
-    {
-        $client = static::createClient();
-
-        $query = 'card';
-        $client->request('GET', $this->baseUrl . 'card.json?&query=' . $query);
-
-        $data = json_decode($client->getResponse()->getContent());
-
-        $this->assertObjectHasAttribute('content', $data);
-        $this->assertInstanceOf('stdClass', $data->content);
-        $this->assertEquals(200, $data->code);
-        $this->assertSuccessfulResponse($client->getResponse(), 'json');
-    }
-
-    public function testSearchValidCardAsPopup()
-    {
-        $client = static::createClient();
-
-        $query = 'card';
-        $crawler = $client->request('GET', $this->baseUrl . 'card.html?query=' . $query . '&popup=1');
-
-        $this->assertSuccessfulResponse($client->getResponse(), 'html');
-        $this->assertTrue($crawler->filter('.fc-card.popup .close')->count() > 0);
+        // Assert that records found and category included
+        $response->assertJsonFragment(['category']);
+        $this->assertEquals('Category 1', $response->json('0.category.title'));
+        $response->assertJsonFragment(['slug' => 'card-1']);
+        $response->assertJsonCount(1);
+        $response->assertStatus(200);
     }
 
     public function testSearchInvalidCards()
     {
-        $client = static::createClient();
+        // Search query
+        $keyword = 'ca 1';
 
-        $count = 10;
-        $query = 'card' . uniqid();
+        /** @var TestResponse $response */
+        // Request to get cards by search query
+        $response = $this->getJson(sprintf('/api/cards?filter[search]=%s', $keyword));
 
-        // JSON request
-        $client->request('GET', $this->baseUrl . 'cards.json?limit=' . $count . '&query=' . $query);
-        $data = json_decode($client->getResponse()->getContent());
-
-        $this->assertNotFoundResponse($client->getResponse(), 'json');
-        $this->assertEquals(0, count($data->content));
-        $this->assertEquals(404, $data->code);
-
-        // HTML request
-        $client->request('GET', $this->baseUrl . 'cards.html?limit=' . $count . '&query=' . $query);
-        $this->assertNotFoundResponse($client->getResponse(), 'html');
+        // Assert that nothing found based on above search query
+        $response->assertJsonCount(0);
+        $response->assertStatus(200);
     }
 
-    public function testSearchInvalidCard()
+    public function testSearchValidCardsWithoutCategory()
     {
-        $client = static::createClient();
+        // Search query
+        $keyword = 'card 1';
 
-        $query = 'card' . uniqid();
-        $client->request('GET', $this->baseUrl . 'card.json?&query=' . $query);
+        /** @var TestResponse $response */
+        // Request to get cards by a search query and does not include category details
+        $response = $this->getJson(sprintf('/api/cards?filter[search]=%s', $keyword));
 
-        $data = json_decode($client->getResponse()->getContent());
-
-        $this->assertNotFoundResponse($client->getResponse(), 'json');
-        $this->assertFalse(isset($data->content));
-        $this->assertEquals(404, $data->code);
-
-        // HTML request
-        $client->request('GET', $this->baseUrl . 'card.html?query=' . $query);
-        $this->assertNotFoundResponse($client->getResponse(), 'html');
+        // Assert that records does not include category details
+        $response->assertJsonMissing(['category']);
+        $this->assertNull($response->json('0.category.title'));
+        $response->assertJsonFragment(['slug' => 'card-1']);
+        $response->assertJsonCount(1);
+        $response->assertStatus(200);
     }
 
-    public function testRandomCards()
+    public function testFilterCardsByCategory()
     {
-        $client = static::createClient();
+        // Get a category
+        $category = Category::all()->first();
 
-        $client->request('GET', $this->baseUrl . 'cards/random.json?&limit=1');
+        /** @var TestResponse $response */
+        // Request to get cards filtered by a category
+        $response = $this->getJson(sprintf('/api/cards?filter[category_id]=%s&include=category', $category->id));
 
-        $data = json_decode($client->getResponse()->getContent());
-
-        $this->assertSuccessfulResponse($client->getResponse(), 'json');
-        $this->assertEquals(200, $data->code);
-        $this->assertCount(1, $data->content);
-    }
-
-    protected function getContentType($type)
-    {
-        if ($type == 'json') {
-            return 'application/json';
+        // Assert that the records are belongs to the category above
+        $cards = $response->json();
+        foreach ($cards as $card) {
+            $this->assertArrayHasKey('category', $card);
+            $this->assertEquals($category->id, $card['category']['id']);
         }
-
-        return 'text/html; charset=UTF-8';
-    }
-
-    protected function assertSuccessfulResponse($response, $type = 'json')
-    {
-        $this->assertTrue($response->isSuccessful());
-        $this->assertEquals($this->getContentType($type), $response->headers->get('Content-Type'));
-    }
-
-    protected function assertNotFoundResponse($response, $type = 'json')
-    {
-        $this->assertTrue($response->isNotFound());
-        $this->assertEquals($this->getContentType($type), $response->headers->get('Content-Type'));
+        $this->assertTrue(count($cards) > 0);
+        $response->assertStatus(200);
     }
 }

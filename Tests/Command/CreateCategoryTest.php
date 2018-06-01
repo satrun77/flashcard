@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Moo\FlashCardBundle package.
+ * This file is part of the Moo\FlashCard package.
  *
  * (c) Mohamed Alsharaf <mohamed.alsharaf@gmail.com>
  *
@@ -9,136 +9,84 @@
  * file that was distributed with this source code.
  */
 
-namespace Moo\FlashCardBundle\Tests\Command;
+namespace Moo\FlashCard\Tests\Command;
 
-use Moo\FlashCardBundle\Tests\AbstractWebTestCase;
-use Moo\FlashCardBundle\Command\CreateCategoryCommand;
+use Mockery;
+use Moo\FlashCard\Command\CreateCategory;
+use Moo\FlashCard\Entity\Category;
+use Moo\FlashCard\Tests\BaseTestCase;
 
 /**
  * CreateCategoryTest contains test cases for the command line CreateCategory class.
  *
  * @author Mohamed Alsharaf <mohamed.alsharaf@gmail.com>
  */
-class CreateCategoryTest extends AbstractWebTestCase
+class CreateCategoryTest extends BaseTestCase
 {
     public function testCreateCategory()
     {
-        $this->loadFixtures([]);
-
         // Test creating category.
         $categoryTile = 'Test Category 1';
 
-        $output = $this->runCommand('flashcard:category:create', [
-            'title'            => $categoryTile,
-            'desc'             => 'Category Desc',
-            '--active'         => true,
-            '--no-interaction' => false,
-        ]);
+        // Mock the ask method
+        $command = Mockery::mock(CreateCategory::class . '[ask]');
+        $command->shouldReceive('ask')
+            ->times(3)
+            ->andReturn($categoryTile);
 
-        $this->assertRegExp('/Voila/', $output);
-    }
+        // Register the command
+        $this->app['Illuminate\Contracts\Console\Kernel']->registerCommand($command);
 
-    public function testCreateSubCategory()
-    {
-        $this->loadFixtures([
-            'Moo\FlashCardBundle\DataFixtures\ORM\LoadCreateCategory',
-        ]);
-
-        $category = $this->get('moo_flashcard.category.repository')->findOneById(1);
-
-        $categoryTile = 'Test Category 2';
-        $output = $this->runCommand('flashcard:category:create', [
-            'title'            => $categoryTile,
-            'desc'             => 'Category Desc',
-            'parent'           => $category->getId(),
+        // Call the command
+        $this->artisan('flashcard:category', [
+            '--active' => true,
             '--no-interaction' => true,
         ]);
 
-        $this->assertRegExp('/Voila/', $output);
-    }
+        // Query the created category
+        $category = Category::where('title', $categoryTile)->first();
 
-    public function testCreateShortTitleCategory()
-    {
-        $this->loadFixtures([]);
-
-        $categoryTile = 'Catg';
-
-        $output = $this->runCommand('flashcard:category:create', [
-            'title'            => $categoryTile,
-            'desc'             => 'Category Desc',
-            '--active'         => true,
-            '--no-interaction' => false,
-        ]);
-
-        $this->assertFalse(strpos($output, 'Voila') !== false);
-    }
-
-    /**
-     * @expectedException        InvalidArgumentException
-     */
-    public function testEmptyCategoryTitle()
-    {
-        $this->loadFixtures([]);
-
-        $command = new CreateCategoryCommand();
-
-        $dialog = $this->getMock('Symfony\Component\Console\Helper\DialogHelper', ['askAndValidate']);
-        $dialog->expects($this->once())
-            ->method('askAndValidate')
-            ->will($this->onConsecutiveCalls(
-                $this->returnCallback(function () use ($command) {
-                    return $command->validateTitle('');
-                })));
-        $this->runInteractiveCommand($command, $dialog);
-    }
-
-    /**
-     * @expectedException        InvalidArgumentException
-     */
-    public function testInvalidParnetCategoryTitle()
-    {
-        $this->loadFixtures([
-            'Moo\FlashCardBundle\DataFixtures\ORM\LoadCreateCategory',
-        ]);
-
-        $parent = $this->get('moo_flashcard.category.repository')->findOneById(1);
-
-        $command = new CreateCategoryCommand();
-
-        $dialog = $this->getMock('Symfony\Component\Console\Helper\DialogHelper', ['askAndValidate']);
-        $dialog->expects($this->exactly(2))
-            ->method('askAndValidate')
-            ->will($this->onConsecutiveCalls(
-                $this->returnCallback(function () use ($command) {
-                    return $command->validateTitle('Category 2');
-                }), $this->returnCallback(function () use ($command, $parent) {
-                return $command->validateParent($parent->getId() + 100);
-            })));
-        $this->runInteractiveCommand($command, $dialog);
+        // Check category values as expected
+        $this->assertEquals($categoryTile, $category->title);
+        $this->assertTrue((bool)$category->active);
     }
 
     public function testCreateSubCategoryInteractive()
     {
-        $this->loadFixtures([
-            'Moo\FlashCardBundle\DataFixtures\ORM\LoadCreateCategory',
+        $this->category();
+        $category = $this->category([
+            'title' => 'Category 2',
         ]);
 
-        $parent = $this->get('moo_flashcard.category.repository')->findOneById(1);
+        // Test creating category.
+        $title = 'Child Category 1';
+        $content = 'Content';
+        $color = 'red';
 
-        $command = new CreateCategoryCommand();
+        // Mock the ask & choice method
+        $ask = Mockery::mock(CreateCategory::class . '[ask, choice]');
+        $ask->shouldReceive('ask')
+            ->times(3)
+            ->andReturn($title, $content, $color)
+            ->shouldReceive('choice')
+            ->once()
+            ->andReturn($category->title);
 
-        $dialog = $this->getMock('Symfony\Component\Console\Helper\DialogHelper', ['askAndValidate']);
-        $dialog->expects($this->exactly(2))
-            ->method('askAndValidate')
-            ->will($this->onConsecutiveCalls(
-                $this->returnCallback(function () use ($command) {
-                    return $command->validateTitle('Category 2');
-                }), $this->returnCallback(function () use ($command, $parent) {
-                return $command->validateParent($parent->getId());
-            })));
+        // Register the command
+        $this->app['Illuminate\Contracts\Console\Kernel']->registerCommand($ask);
 
-        $output = $this->runInteractiveCommand($command, $dialog);
+        // Call the command
+        $this->artisan('flashcard:category', [
+            '--active' => true,
+            '--no-interaction' => true,
+        ]);
 
-        $this->assertRegExp('/Voila/', $output->getDisplay());
+        // Query the created category
+        $childCategory = Category::where('title', $title)->first();
+
+        // Check category values as expected
+        $this->assertEquals($title, $childCategory->title);
+        $this->assertEquals($category->id, $childCategory->parent);
+        $this->assertTrue((bool)$childCategory->active);
     }
 }

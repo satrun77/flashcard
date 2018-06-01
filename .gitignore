@@ -1,5 +1,5 @@
-/Tests/tests/cache
-/Tests/tests/logs
+/tests/cache
+/tests/logs
 /composer.lock
 /composer.phar
 /vendor/

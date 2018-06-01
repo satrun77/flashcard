@@ -1,51 +1,52 @@
 {
-    "name": "moo/flashcard-bundle",
-    "type": "symfony-bundle",
-    "description": "Symfony bundle that provides a simple flash card system with REST API.",
-    "keywords": ["flash card", "knowledgebase"],
-    "homepage": "https://github.com/satrun77/MooFlashCardBundle",
+    "name": "moo/flashcard",
+    "type": "laravel-package",
+    "description": "Laravel package that provides a simple flash card system with REST API.",
+    "keywords": ["flash card", "knowledgebase", "laravel", "console", "cli"],
+    "homepage": "https://github.com/satrun77/flashcard",
+    "support": {
+        "issues": "https://github.com/satrun77/flashcard/issues",
+        "source": "https://github.com/satrun77/flashcard"
+    },
     "license": "MIT",
     "authors": [
         {
             "name": "Mohamed Alsharaf",
             "email": "mohamed.alsharaf@gmail.com",
-            "homepage": "http://my.geek.nz",
-            "role": "Developer"
+            "homepage": "http://my.geek.nz"
         }
     ],
     "require": {
-        "php": ">=5.5.0",
-        "symfony/framework-bundle": "~2.7",
-        "doctrine/doctrine-bundle": "~1.5",
-        "doctrine/orm": "~2.4",
-        "stof/doctrine-extensions-bundle": "~1.2",
-        "friendsofsymfony/rest-bundle": "~1.7",
-        "jms/serializer-bundle": "~1.1",
-        "nelmio/api-doc-bundle": "~2.11",
-        "symfony/swiftmailer-bundle": "~2.3",
-        "knplabs/knp-paginator-bundle": "~2.5",
-        "symfony/symfony": "~2.8.0"
+        "php": ">=7.1",
+        "illuminate/console": "^5.6",
+        "illuminate/database": "^5.6",
+        "illuminate/http": "^5.6",
+        "mockery/mockery": "^1.1",
+        "spatie/laravel-query-builder": "^1.9",
+        "spatie/laravel-sluggable": "^2.1"
     },
     "require-dev": {
-        "symfony/finder": "~2.7",
-        "symfony/form": "~2.7",
-        "symfony/validator": "~2.7",
-        "symfony/css-selector": "~2.7",
-        "symfony/assetic-bundle": "~2.7",
-        "liip/functional-test-bundle": "~1.2",
-        "doctrine/data-fixtures": "~1.1",
-        "doctrine/doctrine-fixtures-bundle": "~2.2"
-    },
-    "suggest": {
-        "moo/flashcardadmin-bundle": "Provides admin classes that be used with SonataAdminBundle.",
-        "doctrine/doctrine-fixtures-bundle": "Required when using the fixture loading functionality.",
-        "doctrine/data-fixtures": "Required when using the fixture loading functionality.",
-        "liip/functional-test-bundle": "Required for bundle unit testing.",
-        "doctrine/migrations": "Required for database migration.",
-        "doctrine/doctrine-migrations-bundle": "Required for database migration."
+        "phpunit/phpunit": "^7.1",
+        "orchestra/testbench": "~3.5.0|~3.6.0"
     },
     "autoload": {
-        "psr-0": {"Moo\\FlashCardBundle": ""}
+        "psr-4": {
+            "Moo\\": "./src"
+        }
     },
-    "target-dir": "Moo/FlashCardBundle"
+    "autoload-dev": {
+        "psr-4": {
+            "Moo\\FlashCard\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Moo\\FlashCard\\CoreServiceProvider"
+            ]
+        }
+    }
 }

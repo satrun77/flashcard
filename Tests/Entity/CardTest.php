@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Moo\FlashCardBundle package.
+ * This file is part of the Moo\FlashCard package.
  *
  * (c) Mohamed Alsharaf <mohamed.alsharaf@gmail.com>
  *
@@ -9,53 +9,63 @@
  * file that was distributed with this source code.
  */
 
-namespace Moo\FlashCardBundle\Tests\Entity;
+namespace Moo\FlashCard\Tests\Entity;
 
-use Moo\FlashCardBundle\Entity\Card;
-use Moo\FlashCardBundle\Tests\AbstractWebTestCase;
+use Moo\FlashCard\Tests\BaseTestCase;
 
 /**
  * CardTest contains test cases for the Card entity class.
  *
  * @author Mohamed Alsharaf <mohamed.alsharaf@gmail.com>
  */
-class CardTest extends AbstractWebTestCase
+class CardTest extends BaseTestCase
 {
     public function testGetTitle()
     {
-        $title = 'Title';
-        $content = 'Content';
-        $card = new Card();
-        $card->setTitle($title);
-        $card->setContent($content);
-        $card->setActive(true);
+        // Create a card
+        $card = $this->card();
 
-        $this->assertEquals($title, $card->getTitle());
-        $this->assertEquals($content, $card->getContent());
-        $this->assertEmpty($card->getMetaKeywords());
+        // Assert that the card is created
+        $this->assertEquals('Cool card', $card->title);
+        $this->assertEquals('cool-card', $card->slug);
+        $this->assertEmpty($card->meta_description);
     }
 
     public function testIsActive()
     {
-        $card = new Card();
-        $card->setActive(true);
-
-        $this->assertTrue($card->isActive());
-    }
-
-    public function testMakingSlug()
-    {
-        $this->loadFixtures([
-            'Moo\FlashCardBundle\DataFixtures\ORM\LoadCreateCard',
+        // Create inactive card
+        $card = $this->card([
+            'active' => false,
         ]);
 
-        $cardService = $this->get('moo_flashcard.card.repository');
-        $card = $cardService->findOneBySlugJoinedToCategory('card-1');
+        // Assert the card is inactive
+        $this->assertFalse((bool)$card->active);
+    }
 
-        $this->assertEquals('card-1', $card->getSlug());
-        $this->assertInstanceOf('\Moo\FlashCardBundle\Entity\Card', $card);
-        $this->assertInstanceOf('\DateTime', $card->getCreated());
-        $this->assertInstanceOf('\DateTime', $card->getUpdated());
-        $this->assertInstanceOf('\Moo\FlashCardBundle\Entity\Category', $card->getCategory());
+    /**
+     * @expectedException   InvalidArgumentException
+     */
+    public function testShortCardTitle()
+    {
+        // Attempt to create a card with short title - expect an exception
+        $this->card([
+            'title' => 'Card',
+        ]);
+    }
+
+    public function testUniqueCardSlug()
+    {
+        // Create a card
+        $card1 = $this->card([
+            'title' => 'Card one',
+        ]);
+
+        // Create another card with same title
+        $card2 = $this->card([
+            'title' => 'Card one',
+        ]);
+
+        // Assert that the slug is not equals
+        $this->assertNotEquals($card2->slug, $card1->slug);
     }
 }
