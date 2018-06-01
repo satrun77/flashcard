@@ -1,9 +1,9 @@
 MooFlashCard
 =============
 [![SensioLabsInsight](https://insight.sensiolabs.com/projects/c60d35bc-17f3-40b7-9b17-f504b8a62270/mini.png)](https://insight.sensiolabs.com/projects/c60d35bc-17f3-40b7-9b17-f504b8a62270)
-[![Build Status](https://travis-ci.org/satrun77/MooFlashCard.svg?branch=master)](https://travis-ci.org/satrun77/MooFlashCard)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/satrun77/MooFlashCard/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/satrun77/MooFlashCard/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/satrun77/MooFlashCard/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/satrun77/MooFlashCard/?branch=master)
+[![Build Status](https://travis-ci.org/satrun77/flashcard.svg?branch=master)](https://travis-ci.org/satrun77/flashcard)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/satrun77/flashcard/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/satrun77/flashcard/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/satrun77/flashcard/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/satrun77/flashcard/?branch=master)
 
 This package provides model for card & category to organise simple flash card system.
 It provide an API end-point to query for cards or categories.
