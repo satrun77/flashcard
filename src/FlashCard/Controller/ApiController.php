@@ -18,6 +18,7 @@ use Moo\FlashCard\Entity\Card;
 use Moo\FlashCard\Entity\Category;
 use Spatie\QueryBuilder\Filter;
 use Spatie\QueryBuilder\QueryBuilder;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * RestApiController is the default REST API controller.
@@ -93,7 +94,7 @@ class ApiController extends Controller
                 Filter::custom('search', SearchableCardFilter::class)
             )
             ->withCount([
-                'cards' => function ($query) {
+                'cards' => function (Builder $query) {
                     $query->active();
                 },
             ])

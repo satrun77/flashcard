@@ -21,7 +21,7 @@ class SearchableCardFilter implements Filter
     public function __invoke(Builder $query, $value, string $property): Builder
     {
         // Filter a query by search for LIKE title or content
-        return $query->where(function ($query) use ($value) {
+        return $query->where(function (Builder $query) use ($value) {
             $query->search($value);
         });
     }
