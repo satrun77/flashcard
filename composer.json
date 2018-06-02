@@ -45,7 +45,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Moo\\FlashCard\\CoreServiceProvider"
+                "Moo\\FlashCard\\ServiceProvider"
             ]
         }
     }
