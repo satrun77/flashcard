@@ -20,21 +20,13 @@
 
     <testsuites>
         <testsuite name="FlashCard Test Suite">
-            <directory>./tests</directory>
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
 
     <filter>
-        <whitelist addUncoveredFilesFromWhitelist="true">
+        <whitelist>
             <directory suffix=".php">src/</directory>
-            <exclude>
-                <directory>tests/</directory>
-                <directory>routes/</directory>
-                <directory>database/</directory>
-                <directory>docs/</directory>
-                <directory>vendor/</directory>
-            </exclude>
         </whitelist>
     </filter>
 </phpunit>
-
