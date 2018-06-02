@@ -3,18 +3,15 @@
 namespace Moo\FlashCard\Traits;
 
 use Illuminate\Database\Eloquent\Model;
-use Validator;
 
 /**
  * Trait AskAndValidate provide command user input for ask and validate the user input
- *
- * @package Moo\FlashCard\Traits
  */
 trait AskAndValidate
 {
     /**
-     * @param string $question
-     * @param string $field
+     * @param  string $question
+     * @param  string $field
      * @return string
      */
     protected function askWithValidation(string $question, string $field): string
@@ -31,7 +28,7 @@ trait AskAndValidate
         $validator = $this->getEntity()->getValidator();
         if ($validator->fails()) {
             // Get error message for the field
-            $message = (string)$validator->errors()->first($field);
+            $message = (string) $validator->errors()->first($field);
             // Display warning message if exists
             if (!empty($message)) {
                 $this->warn($message);
@@ -40,7 +37,7 @@ trait AskAndValidate
             }
         }
 
-        return (string)$input;
+        return (string) $input;
     }
 
     /**

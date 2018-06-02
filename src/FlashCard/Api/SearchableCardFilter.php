@@ -15,8 +15,6 @@ use Spatie\QueryBuilder\Filters\Filter;
 
 /**
  * Class SearchableCardFilter provide searchable custom filter for spatie query builder module
- *
- * @package Moo\FlashCard\Api
  */
 class SearchableCardFilter implements Filter
 {

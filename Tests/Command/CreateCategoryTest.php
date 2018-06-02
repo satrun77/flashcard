@@ -39,7 +39,7 @@ class CreateCategoryTest extends BaseTestCase
 
         // Call the command
         $this->artisan('flashcard:category', [
-            '--active' => true,
+            '--active'         => true,
             '--no-interaction' => true,
         ]);
 
@@ -48,7 +48,7 @@ class CreateCategoryTest extends BaseTestCase
 
         // Check category values as expected
         $this->assertEquals($categoryTile, $category->title);
-        $this->assertTrue((bool)$category->active);
+        $this->assertTrue((bool) $category->active);
     }
 
     public function testCreateSubCategoryInteractive()
@@ -59,9 +59,9 @@ class CreateCategoryTest extends BaseTestCase
         ]);
 
         // Test creating category.
-        $title = 'Child Category 1';
+        $title   = 'Child Category 1';
         $content = 'Content';
-        $color = 'red';
+        $color   = 'red';
 
         // Mock the ask & choice method
         $ask = Mockery::mock(CreateCategory::class . '[ask, choice]');
@@ -77,7 +77,7 @@ class CreateCategoryTest extends BaseTestCase
 
         // Call the command
         $this->artisan('flashcard:category', [
-            '--active' => true,
+            '--active'         => true,
             '--no-interaction' => true,
         ]);
 
@@ -87,6 +87,6 @@ class CreateCategoryTest extends BaseTestCase
         // Check category values as expected
         $this->assertEquals($title, $childCategory->title);
         $this->assertEquals($category->id, $childCategory->parent);
-        $this->assertTrue((bool)$childCategory->active);
+        $this->assertTrue((bool) $childCategory->active);
     }
 }

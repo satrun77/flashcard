@@ -86,7 +86,7 @@ class Card extends Model
      */
     public function getShortModifiedAttribute(): string
     {
-        return (string)$this->updated_at->format('F d, Y');
+        return (string) $this->updated_at->format('F d, Y');
     }
 
     /**
@@ -108,21 +108,21 @@ class Card extends Model
     protected function getRules(): array
     {
         return [
-            'title' => 'required|max:255|min:5',
+            'title'       => 'required|max:255|min:5',
             'category_id' => 'required',
-            'slug' => [
+            'slug'        => [
                 'required',
                 // Ensure slug unique except when editing
                 Rule::unique($this->table, 'slug')->ignore($this),
                 'max:' . static::SLUG_SIZE,
-            ]
+            ],
         ];
     }
 
     /**
      * Score to filter by active cards
      *
-     * @param Builder $query
+     * @param  Builder $query
      * @return Builder
      */
     public function scopeActive(Builder $query): Builder
@@ -133,8 +133,8 @@ class Card extends Model
     /**
      * Score to filter by LIKE search
      *
-     * @param Builder $query
-     * @param string $keyword
+     * @param  Builder $query
+     * @param  string  $keyword
      * @return Builder
      */
     public function scopeSearch(Builder $query, string $keyword): Builder
@@ -156,7 +156,7 @@ class Card extends Model
             // Insert record in card view table
             $cardView = new CardView([
                 'card_id' => $this->id,
-                'ip' => $ip,
+                'ip'      => $ip,
             ]);
             $cardView->save();
 

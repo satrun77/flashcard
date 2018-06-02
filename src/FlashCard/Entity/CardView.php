@@ -47,7 +47,7 @@ class CardView extends Model
     /**
      * Set ip
      *
-     * @param string $value
+     * @param  string $value
      * @return self
      */
     public function setIpAttribute($value)
@@ -79,7 +79,7 @@ class CardView extends Model
                 'required',
                 // Ensure ip address unique per card
                 Rule::unique($this->table, 'ip')->where('card_id', $this->card_id),
-            ]
+            ],
         ];
     }
 }

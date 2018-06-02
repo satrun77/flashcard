@@ -30,32 +30,32 @@ class RestApiControllerTest extends BaseTestCase
         // Create categories
         $category1 = $this->category();
         $category2 = $this->category([
-            'title' => 'Category 2'
+            'title' => 'Category 2',
         ]);
         $category3 = $this->category([
-            'title' => 'Category 3'
+            'title' => 'Category 3',
         ]);
         $this->category([
-            'title' => 'Category 4'
+            'title' => 'Category 4',
         ]);
 
         // Create cards
         for ($i = 1; $i < 5; $i++) {
             $this->card([
-                'title' => 'Card ' . $i,
+                'title'       => 'Card ' . $i,
                 'category_id' => $category1->id,
             ]);
         }
 
         for ($i = 5; $i < 8; $i++) {
             $this->card([
-                'title' => 'Card ' . $i,
+                'title'       => 'Card ' . $i,
                 'category_id' => $category2->id,
             ]);
         }
 
         $this->card([
-            'title' => 'Card 9',
+            'title'       => 'Card 9',
             'category_id' => $category3->id,
         ]);
     }
@@ -72,7 +72,7 @@ class RestApiControllerTest extends BaseTestCase
         // Assert that the above card exists in the response
         $response->assertStatus(200);
         $response->assertJsonFragment(['title' => $card->title]);
-        $response->assertJsonFragment(['category_id' => (string )$card->category_id]);
+        $response->assertJsonFragment(['category_id' => (string) $card->category_id]);
     }
 
     public function testGetLimitCard()

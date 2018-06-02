@@ -17,7 +17,7 @@ abstract class BaseTestCase extends Orchestra
     /**
      * Define environment setup.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param \Illuminate\Foundation\Application $app
      *
      * @return void
      */
@@ -49,11 +49,11 @@ abstract class BaseTestCase extends Orchestra
             $categoryId = $this->category()->id;
         }
         $card = new Card(array_replace([
-            'title' => 'Cool card',
-            'active' => true,
-            'content' => 'Content',
+            'title'            => 'Cool card',
+            'active'           => true,
+            'content'          => 'Content',
             'meta_description' => '',
-            'category_id' => $categoryId,
+            'category_id'      => $categoryId,
         ], $args));
 
         $card->save();
@@ -64,11 +64,11 @@ abstract class BaseTestCase extends Orchestra
     protected function category(array $args = [])
     {
         $category = new Category(array_replace([
-            'title' => 'Category 1',
+            'title'       => 'Category 1',
             'description' => '',
-            'active' => true,
-            'color' => 'red',
-            'parent' => 0,
+            'active'      => true,
+            'color'       => 'red',
+            'parent'      => 0,
         ], $args));
 
         $category->save();

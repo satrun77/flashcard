@@ -39,11 +39,11 @@ class CardTest extends BaseTestCase
         ]);
 
         // Assert the card is inactive
-        $this->assertFalse((bool)$card->active);
+        $this->assertFalse((bool) $card->active);
     }
 
     /**
-     * @expectedException   InvalidArgumentException
+     * @expectedException   \InvalidArgumentException
      */
     public function testShortCardTitle()
     {

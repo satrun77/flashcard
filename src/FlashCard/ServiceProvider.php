@@ -27,6 +27,6 @@ class ServiceProvider extends BaseServiceProvider
         }
 
         // Load API routes
-        $this->loadRoutesFrom(__DIR__.'/../../routes/api.php');
+        $this->loadRoutesFrom(__DIR__ . '/../../routes/api.php');
     }
 }

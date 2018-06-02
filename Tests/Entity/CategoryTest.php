@@ -11,7 +11,6 @@
 
 namespace Moo\FlashCard\Tests\Entity;
 
-
 use Moo\FlashCard\Tests\BaseTestCase;
 
 /**
@@ -25,7 +24,7 @@ class CategoryTest extends BaseTestCase
     {
         $category1 = $this->category();
         $category2 = $this->category([
-            'title' => 'Category 2',
+            'title'  => 'Category 2',
             'parent' => $category1->id,
         ]);
 
@@ -34,7 +33,7 @@ class CategoryTest extends BaseTestCase
     }
 
     /**
-     * @expectedException   InvalidArgumentException
+     * @expectedException   \InvalidArgumentException
      */
     public function testShortCategoryTitle()
     {

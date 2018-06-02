@@ -45,7 +45,7 @@ class CreateCategory extends Command
     {
         if (is_null($this->entity)) {
             $this->entity = new Category([
-                'active' => (boolean)$this->option('active'),
+                'active' => (bool) $this->option('active'),
             ]);
         }
 

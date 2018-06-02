@@ -11,10 +11,10 @@
 
 namespace Moo\FlashCard\Tests\Command;
 
+use Mockery;
 use Moo\FlashCard\Command\CreateCard;
 use Moo\FlashCard\Entity\Card;
 use Moo\FlashCard\Tests\BaseTestCase;
-use Mockery;
 
 /**
  * CreateCardTest contains test cases for the command line CreateCard class.
@@ -26,8 +26,8 @@ class CreateCardTest extends BaseTestCase
     public function testCreateCard()
     {
         // Test creating card.
-        $title = 'Test Card 1';
-        $slug = 'test-card-1';
+        $title    = 'Test Card 1';
+        $slug     = 'test-card-1';
         $category = $this->category();
 
         // Mock the ask & choice method
@@ -44,7 +44,7 @@ class CreateCardTest extends BaseTestCase
 
         // Call the command
         $this->artisan('flashcard:card', [
-            '--active' => true,
+            '--active'         => true,
             '--no-interaction' => true,
         ]);
 
@@ -55,6 +55,6 @@ class CreateCardTest extends BaseTestCase
         $this->assertEquals($title, $card->title);
         $this->assertEquals($category->id, $card->category_id);
         $this->assertEquals($slug, $card->slug);
-        $this->assertTrue((bool)$card->active);
+        $this->assertTrue((bool) $card->active);
     }
 }

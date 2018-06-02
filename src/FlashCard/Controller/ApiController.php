@@ -29,13 +29,13 @@ class ApiController extends Controller
     /**
      * Get collection of cards
      *
-     * @param Request $request
+     * @param  Request                       $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function getCards(Request $request)
     {
         // Parameter for limit by
-        $limit = (int)$request->input('limit');
+        $limit = (int) $request->input('limit');
 
         $cards = QueryBuilder::for(Card::class)
             ->defaultSort('title')
@@ -95,7 +95,7 @@ class ApiController extends Controller
             ->withCount([
                 'cards' => function ($query) {
                     $query->active();
-                }
+                },
             ])
             ->active()
             ->get();

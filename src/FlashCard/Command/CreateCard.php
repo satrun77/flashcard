@@ -46,7 +46,7 @@ class CreateCard extends Command
     {
         if (is_null($this->entity)) {
             $this->entity = new Card([
-                'active' => (boolean)$this->option('active'),
+                'active' => (bool) $this->option('active'),
             ]);
         }
 
@@ -64,6 +64,7 @@ class CreateCard extends Command
         $choices = Category::all()->pluck('title', 'id')->toArray();
         if (count($choices) === 0) {
             $this->error('Add category first before creating cards.');
+
             return 1;
         }
 

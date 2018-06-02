@@ -2,9 +2,9 @@
 
 namespace Moo\FlashCard\Entity;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Moo\FlashCard\Traits\Validatable;
-use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Category is the entity class that represents a record from the database.
@@ -62,7 +62,7 @@ class Category extends Model
      */
     public function children()
     {
-        return $this->hasMany(Category::class, 'parent');
+        return $this->hasMany(self::class, 'parent');
     }
 
     /**
@@ -70,7 +70,7 @@ class Category extends Model
      */
     public function parent()
     {
-        return $this->belongsTo(Category::class, 'parent');
+        return $this->belongsTo(self::class, 'parent');
     }
 
     /**
@@ -98,7 +98,7 @@ class Category extends Model
     /**
      * Scope to filter by active categories
      *
-     * @param Builder $query
+     * @param  Builder $query
      * @return Builder
      */
     public function scopeActive(Builder $query): Builder
@@ -109,8 +109,8 @@ class Category extends Model
     /**
      * Score to filter by LIKE search
      *
-     * @param Builder $query
-     * @param string $keyword
+     * @param  Builder $query
+     * @param  string  $keyword
      * @return Builder
      */
     public function scopeSearch(Builder $query, string $keyword): Builder
