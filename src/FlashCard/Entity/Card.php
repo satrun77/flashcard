@@ -86,7 +86,11 @@ class Card extends Model
      */
     public function getShortModifiedAttribute(): string
     {
-        return (string) $this->updated_at->format('F d, Y');
+        if (!is_null($this->updated_at)) {
+            return (string) $this->updated_at->format('F d, Y');
+        }
+
+        return '';
     }
 
     /**
